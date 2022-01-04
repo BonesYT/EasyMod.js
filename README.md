@@ -1,5 +1,5 @@
 # EasyMod.js
-EasyMod.js by BonesYT, a library that adds multiply methods into JS!
+EasyMod.js by BonesYT, a library that adds multiple methods into JS!
 
 This adds a lot of methods to: strings, numbers, booleans, bigint, functions, arrays, objects and date!
 
