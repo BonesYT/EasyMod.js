@@ -253,6 +253,32 @@ Number.prototype.low = function (e=0) {
 Number.prototype.infs = function () {
     return Math.log10(this)/Math.log10(Number.MAX_VALUE)
 }
+Number.prototype.toDate = function () {
+    return new Date(this)
+}
+Number.prototype.toTimeStr = function (hasMS = false) {
+    var a = this % 1e3,
+        b = Math.floor(this/1e3)%60,
+        c = Math.floor(this/6e4)%60,
+        d = Math.floor(this/3.6e6)%24,
+        e = Math.floor(this/8.64e7)%365,
+        f = Math.floor(this/3.1536e10),
+        r = []
+    a = a == 1 ? a + ' millisecond ': a + ' milliseconds'
+    b = b == 1 ? b + ' second' : b + ' seconds'
+    c = c == 1 ? c + ' minute' : c + ' minutes'
+    d = d == 1 ? d + ' hour' : d + ' hours'
+    e = e == 1 ? e + ' day' : e + ' days'
+    f = f == 1 ? f + ' year' : f + ' years'
+    if (hasMS) r.push(a)
+    if (this >= 1e3 | !hasMS) r.push(b)
+    if (this >= 6e4) r.push(c)
+    if (this >= 3.6e6) r.push(d)
+    if (this >= 8.64e7) r.push(e)
+    if (this >= 3.1536e10) r.push(f)
+    r[r.length-1] = r[r.length-1].trim()
+    return r.join(', ')
+}
 Number.DIST = Math.log10(Number.MAX_SAFE_INTEGER)/Math.log10(Number.MAX_VALUE)
 
 //BOOLEANS
@@ -300,20 +326,20 @@ String.prototype.befj = function (...i) {
     i = i.join('')
     return i
 }
-String.prototype.html = function (i) {
-    return `<${i}>${this}</${i}>`
+String.prototype.html = function (i, attr) {
+    return `<${i}${attr==undefined?'':' '+attr}>${this}</${i}>`
 }
-String.prototype.html2 = function (i) {
-    return `<${this}>${i}</${this}>`
+String.prototype.html2 = function (i, attr) {
+    return `<${this}${attr==undefined?'':' '+attr}>${i}</${this}>`
 }
 String.prototype.reverse = function () {
     var a = this
     a = a.split('')
     a.reverse()
-    a = a.join('')
+    return a.join('')
 }
 String.prototype.del = function (rx) {
-    this.replace(rx, '')
+    return this.replace(rx, '')
 }
 String.prototype.fitEnd = function (l, f='') {
     l = Math.max(l, 0)
@@ -351,7 +377,7 @@ String.prototype.loopIncludes = function (i, a=2) {
     return this.repeat(a).includes(i)
 }
 String.prototype.heading = function (i, id='', Class='') {
-    i = Number(i).min(6).max(1).floor()
+    i = Number(i||1).min(6).max(1).floor()
     return `<h${i}${id==''?'':` id="${id}"`}${Class==''?'':` class="${Class}"`}>${this}</h${i}>`
 }
 String.prototype.change = function (i) {
@@ -371,15 +397,15 @@ String.prototype.toClipboard = function () {
     document.execCommand('copy')
     document.body.removeChild(el)
 }
-String.prototype.func = function () {
-    return Function(this)
+String.prototype.func = function (isEval) {
+    return isEval ? eval(this) : new Function(this)
 }
 String.prototype.autoCase = function () {
     var a = this.split(' ')
     a = a.map(v => {
         return v.replaceAt(0, v[0].toUpperCase())
     })
-    return a
+    return a.join(' ')
 }
 String.prototype.argSplit = function (by, strStart, strEnd, inStr) {
     var o = [], t = '', str = false, a = false, input = this
@@ -731,7 +757,7 @@ Object.prototype.gate = function () {
     var a = 0
     var b = false
     Object.keys(this).forEach(v => {
-        if (v) {
+        if (this[v]) {
             if (!b) a++
         } else {
             b = true
@@ -750,6 +776,44 @@ Object.prototype.propNames = function (str=false) {
     return str ? Object.keys(this) : keys(this)
 }
 
+//ANY
+
+Object.prototype.switchType = function (type, isFunc, useNew=true) {
+    if (isFunc) {
+        if (self[type] == undefined) {
+            throw Error('[EasyMod.js] 1: type is invalid')
+        } else {
+            try {
+                if (!useNew) throw Error(' is not a constructor')
+                return new self[type](this)
+            } catch (e) {
+                e = e.toString()
+                if (e.includes(' is not a constructor')) {
+                    try {
+                        return self[type](this)
+                    } catch (e) {
+                        throw Error(e)
+                    }
+                } else {
+                    throw Error(e)
+                }
+            }
+        }
+    } else {
+        switch (type) {
+            case 'number': return Number(this); break
+            case 'string': return String(this); break
+            case 'boolean': return Boolean(this); break
+            case 'bigint': return BigInt(this); break
+            case 'object': return Object(this); break
+            case 'array': return Array(this); break
+            case 'symbol': return Symbol(this); break
+            case 'undefined': return undefined; break
+        }
+        throw Error('[EasyMod.js] 1: type is invalid')
+    }
+}
+
 //DATE
 
 Date.prototype.since = function (t) {
@@ -758,4 +822,38 @@ Date.prototype.since = function (t) {
 }
 Date.prototype.daysSinceYear = function (t) {
     return (this.getTime() - new Date('year ' + t).getTime()) / 8.64e7
+}
+
+var EasyObj = {
+    define: (n, v)=>{
+        this[n] = v
+    },
+    undefine: (n)=>{
+        delete this[n]
+    },
+    isDefined: (n)=>{
+        return this[n] != undefined
+    },
+    get: (n)=>{
+        return this[n]
+    },
+    createMethod: (target, name, func)=>{
+        this[target].prototype[name] = func
+    },
+    isConst: (varname)=>{
+        var zzzz
+        try {
+            eval(varname.toString())
+            try {
+                eval(`zzzz = ${varname}`)
+                eval(`${varname} = 'Replaced'`)
+                eval(`${varname} = zzzz`)
+                return false
+            } catch {
+                return true
+            }
+        } catch {
+            throw Error('[EasyMod.js] 0: ' + varname + ' is not defined')
+        }
+    },
 }

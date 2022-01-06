@@ -1,6 +1,6 @@
 {
     "name": "easymod.js",
-    "version": "1",
+    "version": "2",
     "description": "EasyMod.js by BonesYT, a library that adds multiply methods into JS!",
     "main": "EasyMod.js",
     "scripts": {

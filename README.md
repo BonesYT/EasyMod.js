@@ -3,9 +3,11 @@ EasyMod.js by BonesYT, a library that adds multiple methods into JS!
 
 This adds a lot of methods to: strings, numbers, booleans, bigint, functions, arrays, objects and date!
 
+Version: VU2
+
 # Extra Method Functions
 # Numbers
-* add, sub, mul, div, pow, and, or, xor, mod, inv, doub, half, trip, thir, sqr, sqrt, cb, cbrt, bas, nrot, neg, log, log10, log2, logbr, floor, round, ceil, random, clz32, max, min, sin, cos, tan, asin, acos, atan, atan2, sinh, cosh, tanh, asinh, acosh, atanh, sign, abs, trunc, log1p, fround, hypot, imul, eq, ex, gt, gte, lt, lte, comp, isNaN, bool, lfloor, lround, lceil, isInf, isFin, isz, isPos, isNeg, isalt, dti, dtil, array, join, low, infs
+* add, sub, mul, div, pow, and, or, xor, mod, inv, doub, half, trip, thir, sqr, sqrt, cb, cbrt, bas, nrot, neg, log, log10, log2, logbr, floor, round, ceil, random, clz32, max, min, sin, cos, tan, asin, acos, atan, atan2, sinh, cosh, tanh, asinh, acosh, atanh, sign, abs, trunc, log1p, fround, hypot, imul, eq, ex, gt, gte, lt, lte, comp, isNaN, bool, lfloor, lround, lceil, isInf, isFin, isz, isPos, isNeg, isalt, dti, dtil, array, join, low, infs, toDate, toTimeStr
 * Number.: dist
 # Booleans
 * ifelse, sw, number, and, or, xor
@@ -23,3 +25,8 @@ This adds a lot of methods to: strings, numbers, booleans, bigint, functions, ar
 * define, undefine, get, valueMap, gate, onlyAllow, propNames,
 # Date
 * since, daysSinceYear
+# Any
+* switchType
+
+# EasyObj
+* define, undefine, isDefined, get, createMethod, isConst
