@@ -29,4 +29,5 @@ Version: VU2
 * switchType
 
 # EasyObj
+* EasyObj is an object with abilities.
 * define, undefine, isDefined, get, createMethod, isConst
