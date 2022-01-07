@@ -1,9 +1,9 @@
 # EasyMod.js
-EasyMod.js by BonesYT, a library that adds multiple methods into JS!
+EasyMod.js by BonesYT and Binary198, a library that adds a variety methods into JS!
 
 This adds a lot of methods to: strings, numbers, booleans, bigint, functions, arrays, objects and date!
 
-Version: VU2
+Version: VU3
 
 # Extra Method Functions
 # Numbers
@@ -20,7 +20,7 @@ Version: VU2
 * getArgs, getArgsAll, getCommand, addLine
 * (The scripts might not work, i'm gonna fix it soon)
 # Array
-* befj, fitEnd, fitStart, valueMap, sum, prod, onlyFirst, onlyLast, gate, onlyAllow
+* pus, con, befj, fitEnd, fitStart, valueMap, sum, diff, prod, quot, onlyFirst, onlyLast, gate, onlyAllow
 # Object
 * define, undefine, get, valueMap, gate, onlyAllow, propNames,
 # Date
