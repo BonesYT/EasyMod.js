@@ -640,6 +640,15 @@ Function.prototype.addLine = function (...i) {
 
 //ARRAYS
 
+Array.prototype.pus = function(i) {
+   return this.push(i)
+}
+Array.prototype.con = function(i) {
+   for (let j in i) {
+      this.push(j)
+   }
+   return this
+}
 Array.prototype.befj = function (...i) {
     i.push.apply(i, this)
     return i
@@ -695,10 +704,20 @@ Array.prototype.sum = function () {
         return p + c
     }, 0)
 }
+Array.prototype.diff = function () {
+   return this.reduce((p,c)=>{
+         return p - c
+   }, 0)
+}
 Array.prototype.prod = function () {
     return this.reduce((p,c)=>{
         return p * c
     }, 1)
+}
+Array.prototype.quot = function () {
+   return this.reduce((p,c)=>{
+         return p / c
+   }, 1)
 }
 Array.prototype.onlyFirst = function () {
     var a = this
