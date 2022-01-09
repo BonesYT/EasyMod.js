@@ -503,6 +503,11 @@ BigInt.prototype.comp = function (i) {
 
 //FUNCTIONS
 
+Function.prototype.iterate = function (t, i) {
+   if (t == 0) {return i;}
+   else {return this(this.iterate(t-1,i));}
+}
+
 Function.prototype.getArgs = function () {
     var s=this.toString(),
         i=1,
