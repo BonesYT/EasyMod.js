@@ -23,7 +23,7 @@ Helpers/credits (2 users): BonesYT, BinaryCrown
 * getArgs, getArgsAll, getCommand, addLine
 * (The scripts might not work, i'm gonna fix it soon)
 # Arrays
-* pus, con, befj, fitEnd, fitStart, valueMap, sum, diff, prod, quot, onlyFirst, onlyLast, gate, onlyAllow, stringify, detectRepeats, getIndexes
+* pus, con, befj, fitEnd, fitStart, valueMap, sum, diff, prod, quot, onlyFirst, onlyLast, gate, onlyAllow, stringify, detectRepeats, getIndexes, max, min
 # Objects
 * define, undefine, get, valueMap, gate, onlyAllow, propNames, stringify
 # Date

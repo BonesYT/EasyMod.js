@@ -896,6 +896,12 @@ Array.prototype.getIndexes = function (...i) {
     })
     return out
 }
+Array.prototype.max = function () {
+    return Math.max.apply(null, this)
+}
+Array.prototype.min = function () {
+    return Math.min.apply(null, this)
+}
 
 //OBJECTS
 
