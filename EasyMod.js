@@ -1,7 +1,7 @@
 /* This is EasyMod.js
    By BonesYT (start: 19:48 03/01/2022 DD/MM/YYYY)
               (release: 11:58 04/01/2022 DD/MM/YYYY)
-              (update: 16:59 12/01/2022 DD/MM/YYYY)
+              (update: 19:02 12/01/2022 DD/MM/YYYY)
    Last modded by: (no one)
    EasyMod.js basically adds functions to strings, numbers, etc.
    Please don't copy! 
@@ -847,12 +847,51 @@ Array.prototype.gate = function () {
     })
     return a
 }
-Array.prototype.onlyAllow = function (...i) {
+Array.prototype.onlyAllow = function (isValue = false, ...i) {
     var a = []
     i.forEach(v=>{
-        a.push(this[v])
+        if (isValue) {
+            if (this.includes(v)) a.push(v)
+        } else {
+            a.push(this[v])
+        }
     })
     return a
+}
+Array.prototype.stringify = function () {
+    return JSON.stringify(this)
+}
+Array.prototype.detectRepeats = function (isPos = false,isEnd = false) {
+    var out = [],
+        a = 0,
+        b = 0,
+        l = this[0]
+    this.forEach((v,i)=>{
+        if (v != l) {
+            if (isEnd & isPos) {
+                out.push(i - 1)
+            } else {
+                out.push(isPos?b:a)
+            }
+            a = 0
+            b = i
+            l = v
+        }
+        a++
+    })
+    if (isEnd & isPos) {
+        out.push(this.length - 1)
+    } else {
+        out.push(isPos?b:a)
+    }
+    return out
+}
+Array.prototype.getIndexes = function (...i) {
+    var out = []
+    i.forEach(v => {
+        out.push(this.indexOf(v))
+    })
+    return out
 }
 
 //OBJECTS

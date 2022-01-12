@@ -9,3 +9,5 @@ date: DD/MM/YYYY
 * Added more methods such as `Array.prototype.quot`, updated the license, and more.
 # VU4 - 12/01/2022 (16:59) | BonesYT
 * Added more methods and EasyMod keys. 13 total!
+# VU5 - 12/01/2022 (19:01) | BonesYT
+* Added 3 more array methods and fixed the .min.js thing.
