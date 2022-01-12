@@ -6,7 +6,7 @@ This adds a lot of methods to: strings, numbers, booleans, bigint, functions, ar
 Version: VU4
 VU = Version Update 
 
-Helpers/credits (2 users): BonesYT, Binary198
+Helpers/credits (2 users): BonesYT, BinaryCrown
 
 # Extra Method Functions
 # Numbers
