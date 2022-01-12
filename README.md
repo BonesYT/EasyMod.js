@@ -17,15 +17,15 @@ Helpers/credits (2 users): BonesYT, BinaryCrown
 * Boolean.: muland, mulor
 # Strings
 * replaceAt, befj, html, html2, reverse, del, fitEnd, fitStart, loopIncludes, heading, change, toClipboard, func, autoCase, argSplit, isHTML, atob, btoa, parse
-# BigInt
+# BigInts
 * number, add, sub, inc, dec, mul, div, pow, bas, neg, abs, sign, eq, ex, gt, gte, lt, lte, isz, isPos, isNeg, comp
 # Functions
 * getArgs, getArgsAll, getCommand, addLine
 * (The scripts might not work, i'm gonna fix it soon)
-# Array
+# Arrays
 * pus, con, befj, fitEnd, fitStart, valueMap, sum, diff, prod, quot, onlyFirst, onlyLast, gate, onlyAllow, stringify, detectRepeats, getIndexes
-# Object
-* define, undefine, get, valueMap, gate, onlyAllow, propNames,
+# Objects
+* define, undefine, get, valueMap, gate, onlyAllow, propNames, stringify
 # Date
 * since, daysSinceYear
 # Any

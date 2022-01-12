@@ -944,6 +944,9 @@ Object.prototype.onlyAllow = function (...i) {
 Object.prototype.propNames = function (str=false) {
     return str ? Object.keys(this) : keys(this)
 }
+Object.prototype.stringify = function () {
+    return JSON.stringify(this)
+}
 
 //ANY
 
