@@ -1,9 +1,85 @@
 /* This is EasyMod.js
    By BonesYT (start: 19:48 03/01/2022 DD/MM/YYYY)
               (release: 11:58 04/01/2022 DD/MM/YYYY)
-              (update: u2 14:57 04/01/2022 DD/MM/YYYY)
+              (update: 16:59 12/01/2022 DD/MM/YYYY)
+   Last modded by: (no one)
    EasyMod.js basically adds functions to strings, numbers, etc.
-   Please don't copy! */
+   Please don't copy! 
+   
+   NOTE: if you're modding/forking this, just remember, also change the .min.js file and in that file,
+   change the EasyMod.isMinimum variable to true!
+   
+   */
+
+//EasyMod's Object
+var EasyObj = {
+    define: (n, v)=>{
+        this[n] = v
+    },
+    undefine: (n)=>{
+        delete this[n]
+    },
+    isDefined: (n)=>{
+        return this[n] != undefined
+    },
+    get: (n)=>{
+        return this[n]
+    },
+    createMethod: (target, name, func)=>{
+        this[target].prototype[name] = func
+    },
+    isConst: (varname)=>{
+        var zzzz
+        try {
+            eval(varname.toString())
+            try {
+                eval(`zzzz = ${varname}`)
+                eval(`${varname} = 'Replaced'`)
+                eval(`${varname} = zzzz`)
+                return false
+            } catch {
+                return true
+            }
+        } catch {
+            throw Error('[EasyMod.js] 0: ' + varname + ' is not defined')
+        }
+    },
+    protoOf: (type)=>{
+        this[type].prototype
+    },
+    waitUntil: (u=()=>{}, f=()=>{}, delay=10) => {
+        var a = 0, i,
+            b = ()=>{
+                if (u(a)) {
+                    f(a)
+                    clearInterval(i)
+                }
+                a++
+            },
+        i = setInterval(b, delay) 
+    },
+    repeatUntil: (u=()=>{}, f=()=>{}, delay=10) => {
+        var a = 0
+        while (!u(a)) {
+            f(a)
+        }
+    },
+    key: {
+        id: {code: {}, key: {}, num: {}},
+        press: key => {
+            return EasyObj.key.id.code[key] | EasyObj.key.id.key[key] | EasyObj.key.id.num[key]
+        },
+        //Set this to true if you want to use less memory (might lag more)
+        compressed: false
+    },
+    mouseDown: false,
+    isMinimum: false,
+    addEL: (type, func, ...options)=>{
+        var a = [type, func]
+        a.push.apply(a, options)
+        document.addEventListener.apply(document, a)
+    }
+}
 
 //NUMBERS
 
@@ -12,6 +88,12 @@ Number.prototype.add = function (i) {
 }
 Number.prototype.sub = function (i) {
     return this - i
+}
+Number.prototype.inc = function () {
+    return this + 1
+}
+Number.prototype.dec = function () {
+    return this - 1
 }
 Number.prototype.mul = function (i) {
     return this * i
@@ -433,6 +515,14 @@ String.prototype.argSplit = function (by, strStart, strEnd, inStr) {
     }
     return o
 }
+String.prototype.isHTML = function () {
+    var a = document.createElement('div');
+    a.innerHTML = this;
+    for (var c = a.childNodes, i = c.length; i--; ) {
+        if (c[i].nodeType == 1) return true; 
+    };
+    return false;
+}
 
 //BIGINT
 
@@ -444,6 +534,12 @@ BigInt.prototype.add = function (i) {
 }
 BigInt.prototype.sub = function (i) {
     return this - BigInt(i)
+}
+BigInt.prototype.inc = function () {
+    return this + 1n
+}
+BigInt.prototype.dec = function () {
+    return this - 1n
 }
 BigInt.prototype.mul = function (i) {
     return this * BigInt(i)
@@ -837,6 +933,9 @@ Object.prototype.switchType = function (type, isFunc, useNew=true) {
         throw Error('[EasyMod.js] 1: type is invalid')
     }
 }
+Object.objThis = function () {
+    return this
+}
 
 //DATE
 
@@ -848,36 +947,22 @@ Date.prototype.daysSinceYear = function (t) {
     return (this.getTime() - new Date('year ' + t).getTime()) / 8.64e7
 }
 
-var EasyObj = {
-    define: (n, v)=>{
-        this[n] = v
-    },
-    undefine: (n)=>{
-        delete this[n]
-    },
-    isDefined: (n)=>{
-        return this[n] != undefined
-    },
-    get: (n)=>{
-        return this[n]
-    },
-    createMethod: (target, name, func)=>{
-        this[target].prototype[name] = func
-    },
-    isConst: (varname)=>{
-        var zzzz
-        try {
-            eval(varname.toString())
-            try {
-                eval(`zzzz = ${varname}`)
-                eval(`${varname} = 'Replaced'`)
-                eval(`${varname} = zzzz`)
-                return false
-            } catch {
-                return true
-            }
-        } catch {
-            throw Error('[EasyMod.js] 0: ' + varname + ' is not defined')
-        }
-    },
-}
+//Detecting
+document.addEventListener('keydown', e => {
+    EasyObj.key.id.code[e.code] = true
+    EasyObj.key.id.key[e.key] = true
+    EasyObj.key.id.num[e.keyCode] = true
+})
+document.addEventListener('keyup', e => {
+    if (EasyObj.key.compressed) {
+        delete EasyObj.key.id.code[e.code]
+        delete EasyObj.key.id.key[e.key]
+        delete EasyObj.key.id.num[e.keyCode]
+    } else {
+        EasyObj.key.id.code[e.code] = false
+        EasyObj.key.id.key[e.key] = false
+        EasyObj.key.id.num[e.keyCode] = false
+    }
+})
+document.addEventListener('mousedown', () => EasyObj.mouseDown = true)
+document.addEventListener('mouseup', () => EasyObj.mouseDown = false)

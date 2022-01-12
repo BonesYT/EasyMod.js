@@ -1,7 +1,7 @@
 {
     "name": "easymod.js",
-    "version": "2",
-    "description": "EasyMod.js by BonesYT and BinaryCrown, a library that adds a variety of methods into JS!",
+    "version": "4",
+    "description": "EasyMod.js by BonesYT, a library that adds a variety of methods into JS!",
     "main": "EasyMod.js",
     "scripts": {
       "test": "echo \"Error: no test specified\" && exit 1"
