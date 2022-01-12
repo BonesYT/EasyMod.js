@@ -58,11 +58,12 @@ var EasyObj = {
             },
         i = setInterval(b, delay) 
     },
-    repeatUntil: (u=()=>{}, f=()=>{}, delay=10) => {
+    repeatUntil: (u=()=>{}, f=()=>{}, end=()=>{}, delay=10) => {
         var a = 0
         while (!u(a)) {
             f(a)
         }
+        end()
     },
     key: {
         id: {code: {}, key: {}, num: {}},
@@ -522,6 +523,12 @@ String.prototype.isHTML = function () {
         if (c[i].nodeType == 1) return true; 
     };
     return false;
+}
+String.prototype.atob = function () {
+    return atob(this)
+}
+String.prototype.btoa = function () {
+    return btoa(this)
 }
 
 //BIGINT
