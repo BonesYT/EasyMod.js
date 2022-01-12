@@ -37,28 +37,28 @@ Number.prototype.mod = function (i) {
 Number.prototype.inv = function (i=1) {
     return i / this
 }
-Number.prototype.doub = function (i) {
+Number.prototype.doub = function () {
     return this * 2
 }
-Number.prototype.half = function (i) {
+Number.prototype.half = function () {
     return this / 2
 }
-Number.prototype.trip = function (i) {
+Number.prototype.trip = function () {
     return this * 3
 }
-Number.prototype.thir = function (i) {
+Number.prototype.thir = function () {
     return this / 3
 }
-Number.prototype.sqr = function (i) {
+Number.prototype.sqr = function () {
     return this ** 2
 }
-Number.prototype.sqrt = function (i) {
+Number.prototype.sqrt = function () {
     return this ** 0.5
 }
-Number.prototype.cb = function (i) {
+Number.prototype.cb = function () {
     return this ** 3
 }
-Number.prototype.cbrt = function (i) {
+Number.prototype.cbrt = function () {
     return this ** (1 / 3)
 }
 Number.prototype.bas = function (i) {
@@ -187,7 +187,7 @@ Number.prototype.lt = function (i) {
 Number.prototype.lte = function (i) {
     return this <= i
 }
-Number.prototype.comp = function (i) {
+Number.prototype.comp = function (i=0) {
     return (this-i).sign()
 }
 Number.prototype.isNaN = function () {
@@ -503,6 +503,11 @@ BigInt.prototype.comp = function (i) {
 
 //FUNCTIONS
 
+Function.prototype.iterate = function (t, i) {
+   if (t == 0) {return i;}
+   else {return this(this.iterate(t-1,i));}
+}
+
 Function.prototype.getArgs = function () {
     var s=this.toString(),
         i=1,
@@ -640,6 +645,15 @@ Function.prototype.addLine = function (...i) {
 
 //ARRAYS
 
+Array.prototype.pus = function(i) {
+   return this.push(i)
+}
+Array.prototype.con = function(i) {
+   for (let j in i) {
+      this.push(j)
+   }
+   return this
+}
 Array.prototype.befj = function (...i) {
     i.push.apply(i, this)
     return i
@@ -695,10 +709,20 @@ Array.prototype.sum = function () {
         return p + c
     }, 0)
 }
+Array.prototype.diff = function () {
+   return this.reduce((p,c)=>{
+         return p - c
+   }, 0)
+}
 Array.prototype.prod = function () {
     return this.reduce((p,c)=>{
         return p * c
     }, 1)
+}
+Array.prototype.quot = function () {
+   return this.reduce((p,c)=>{
+         return p / c
+   }, 1)
 }
 Array.prototype.onlyFirst = function () {
     var a = this
