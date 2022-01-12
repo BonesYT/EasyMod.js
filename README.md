@@ -16,7 +16,7 @@ Helpers/credits (2 users): BonesYT, BinaryCrown
 * ifelse, sw, number, and, or, xor
 * Boolean.: muland, mulor
 # Strings
-* replaceAt, befj, html, html2, reverse, del, fitEnd, fitStart, loopIncludes, heading, change, toClipboard, func, autoCase, argSplit, isHTML, atob, btoa
+* replaceAt, befj, html, html2, reverse, del, fitEnd, fitStart, loopIncludes, heading, change, toClipboard, func, autoCase, argSplit, isHTML, atob, btoa, parse
 # BigInt
 * number, add, sub, inc, dec, mul, div, pow, bas, neg, abs, sign, eq, ex, gt, gte, lt, lte, isz, isPos, isNeg, comp
 # Functions

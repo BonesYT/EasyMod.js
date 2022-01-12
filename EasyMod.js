@@ -530,6 +530,9 @@ String.prototype.atob = function () {
 String.prototype.btoa = function () {
     return btoa(this)
 }
+String.prototype.parse = function () {
+    return JSON.parse(this)
+}
 
 //BIGINT
 
