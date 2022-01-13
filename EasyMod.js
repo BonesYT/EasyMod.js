@@ -11,66 +11,69 @@
    
    */
 
-//EasyMod's Object
+// EasyMod's Object
 var EasyObj = {
-    define: (n, v)=>{
-        this[n] = v
-    },
-    undefine: (n)=>{
-        delete this[n]
-    },
-    isDefined: (n)=>{
-        return this[n] != undefined
-    },
-    get: (n)=>{
-        return this[n]
-    },
-    createMethod: (target, name, func)=>{
-        this[target].prototype[name] = func
-    },
-    isConst: (varname)=>{
-        var zzzz
-        try {
-            eval(varname.toString())
-            try {
-                eval(`zzzz = ${varname}`)
-                eval(`${varname} = 'Replaced'`)
-                eval(`${varname} = zzzz`)
-                return false
-            } catch {
-                return true
+   define: (n, v) => {
+     this[n] = v
+   },
+   undefine: (n) => {
+     delete this[n]
+   },
+   getDefinition: (n) => {
+     return this[n]
+   },
+   isDefined: (n) => {
+     return this[n] != undefined
+   },
+   get: (n) => {
+     return this[n]
+   },
+   createMethod: (target, name, func) => {
+     this[target].prototype[name] = func
+   },
+   deleteMethod: (target, name) => {
+     delete this[target].prototype[name]
+   },
+   isConst: (varname) => {
+      try {
+          eval(varname.toString())
+      } catch {
+          throw Error('[EasyMod.js] ' + varname + ' is not defined')
+      }
+      try {
+        eval(`${varname} = null`)
+      } catch {
+          return true
+      }
+      return false
+   },
+   protoOf: (type) => {
+       this[type].prototype
+   },
+   waitUntil: (u=()=>{}, f=()=>{}, delay=10) => {
+      var a = 0, i,
+         b = ()=>{
+            if (u(a)) {
+               f(a)
+               clearInterval(i)
             }
-        } catch {
-            throw Error('[EasyMod.js] 0: ' + varname + ' is not defined')
-        }
-    },
-    protoOf: (type)=>{
-        this[type].prototype
-    },
-    waitUntil: (u=()=>{}, f=()=>{}, delay=10) => {
-        var a = 0, i,
-            b = ()=>{
-                if (u(a)) {
-                    f(a)
-                    clearInterval(i)
-                }
-                a++
-            },
-        i = setInterval(b, delay) 
+            a++
+         },
+         i = setInterval(b, delay) 
     },
     repeatUntil: (u=()=>{}, f=()=>{}, end=()=>{}, delay=10) => {
-        var a = 0
-        while (!u(a)) {
-            f(a)
-        }
-        end()
+       var a = 0
+       while (!u(a)) {
+          f(a)
+       }
+       end()
     },
     key: {
         id: {code: {}, key: {}, num: {}},
         press: key => {
             return EasyObj.key.id.code[key] | EasyObj.key.id.key[key] | EasyObj.key.id.num[key]
         },
-        //Set this to true if you want to use less memory (might lag more)
+        // Set this to true if you want to use less memory (might lag more)
         compressed: false
     },
     mouseDown: false,
