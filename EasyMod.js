@@ -1,18 +1,48 @@
 /* This is EasyMod.js
    By BonesYT (start: 19:48 03/01/2022 DD/MM/YYYY)
               (release: 11:58 04/01/2022 DD/MM/YYYY)
-              (update: 19:02 12/01/2022 DD/MM/YYYY)
+              (update: 22:22 16/01/2022 DD/MM/YYYY) <-- edit this as well when modding
    Last modded by: (no one)
    EasyMod.js basically adds functions to strings, numbers, etc.
    Please don't copy! 
    
    NOTE: if you're modding/forking this, just remember, also change the .min.js file and in that file,
    change the EasyMod.isMinimum variable to true!
+   Also for every function you add, add it to the EasyObj.added object!
    
    */
 
-//EasyMod's Object
+// EasyMod's Object
 var EasyObj = {
+    added: {
+        proto: {
+            number: ['add','sub','inc','dec','mul','div','pow','and','or','xor','mod','inv','doub','half','trip','thir','sqr','sqrt','cb','cbrt','bas','nrot','neg','log','log10','log2','logb','logbr','floor','round','ceil','random','clz32','max','min','sin',
+                     'cos','tan','asin','acos','atan','atan2','sinh','cosh','tanh','asinh','acosh','atanh','sign','abs','trunc','log1p','fround','hypot','imul','eq','ex','gt','gte','lt','lte','comp','isNaN','bool','lfloor','lround','lceil','isInf','isFin','isz',
+                     'isPos','isNeg','isalt','dti','dtil','array','join','low','infs','toDate','toTimeStr','reverse','fitDim','signMul','sfloor','sround','sceil','toRGB','dist','split','reverseGroups','radtodeg','degtorad','bigint'],
+            boolean: ['ifelse','sw','number','and','or','xor'],
+            string: ['replaceAt','befj','html','html2','reverse','del','fitEnd','fitStart','loopIncludes','heading','change','toClipboard','func','autoCase','argSplit','isHTML','atob','btoa','parse','forEach','map','shiftChar','number','bigint','trimSplit',
+                'trimSplitJoin','reverseGroups','removeSplit'],
+            bigint: ['number','add','sub','inc','dec','mul','div','pow','bas','neg','abs','sign','eq','ex','gt','gte','lt','lte','isz','isPos','isNeg','comp'],
+            function: ['iterate','getaArgs','getArgsAll','getCommand','addLine','arrayCall','reverseCall','iteration'],
+            array: ['pus','con','befj','fitEnd','fitStart','valueMap','sum','diff','prod','quot','pow','onlyFirst','onlyLast','gate','onlyAllow','stringify','detectRepeats','getIndexes','max','min','split','joinArray','reverseGroups','lastIndexOf','detect',
+                    'spliceReturn','toRGB','compare','repeat','toObject','joinNum','mapSum','mapProd','mapSub','mapQuot'],
+            object: ['define','undefine','get','valueMap','gate','onlyAllow','propNames','stringify','path','sharechd','removechd','toSave','getLength','forEach','map','keyArray','toArray','reverse','sort','switchType','getType','truefy'],
+            date: ['since','daysSinceYear','add','sub','mul','div','pow','mod','and','or','xor','getAbsDay','toTimeStr'],
+            imagedata: ['arrayfy','editpx','formula']
+        },
+        static: {
+            number: ['DIST'],
+            boolean: ['muland','mulor'],
+            string: ['progress'],
+            bigint: [],
+            function: [],
+            array: ['fromto','fromwidth'],
+            object: [],
+            date: [],
+            imagedata: [],
+            math: ['degrad','distance','chancetotal']
+        }
+    },
     define: (n, v)=>{
         this[n] = v
     },
@@ -70,7 +100,7 @@ var EasyObj = {
         press: key => {
             return EasyObj.key.id.code[key] | EasyObj.key.id.key[key] | EasyObj.key.id.num[key]
         },
-        //Set this to true if you want to use less memory (might lag more)
+        // Set this to true if you want to use less memory (might lag more)
         compressed: false
     },
     mouseDown: false,
@@ -79,10 +109,149 @@ var EasyObj = {
         var a = [type, func]
         a.push.apply(a, options)
         document.addEventListener.apply(document, a)
+    },
+    setDef: (...inputs)=>{
+        return inputs.reduce((p,c)=>{
+            return p == undefined ? c : p
+        }, undefined)
+    },
+    strict: {
+        abseq: (x, y)=>{
+            if (typeof x == typeof y) {
+                switch (typeof x) {
+                    case 'number':
+                        return x == y
+                    break; case 'string':
+                        return x == y
+                    break; case 'boolean':
+                        return x == y
+                    break; case 'bigint':
+                        return x == y
+                    break; case 'undefined':
+                        return true
+                    break; case 'object':
+                        return x.stringify() == y.stringify()
+                    break; case 'function':
+                        return x.toString() == y.toString()
+                    break; case 'symbol':
+                        return x.toString() == y.toString()
+                    break
+                }
+            } else {
+                return false
+            }
+        },
+        gt: (x, y)=>{
+            return typeof x == typeof y ? x > y : false
+        },
+        gte: (x, y)=>{
+            return typeof x == typeof y ? x >= y : false
+        },
+        lt: (x, y)=>{
+            return typeof x == typeof y ? x < y : false
+        },
+        lte: (x, y)=>{
+            return typeof x == typeof y ? x <= y : false
+        },
+    },
+    switchBases: (input = '10', from = 10, to = 2)=>{
+        var a = parseInt(input, from)
+        return a.toString(to)
+    },
+    doc: {
+        msePos: {x: 0, y: 0},
+        lmsePos: {x: 0, y: 0},
+        buttonClick: (node, f=()=>{})=>{
+            if (node.localName != 'button') throw Error('[EasyMod.js] Element tag is not button')
+            if (!(typeof f == 'function')) throw Error('[EasyMod.js] onclick needs to be an function')
+            node.addEventListener('click', f)
+        },
+        setGetElementById: ()=>{
+            $ = function (e) {
+                return document.getElementById(e)
+            }
+        },
+        canv: {
+            canvasMsePos: (node, objTarget)=>{
+                if (node.localName != 'canvas') throw Error('[EasyMod.js] Element tag is not canvas')
+                if (!typeof objTarget == 'object') throw Error('[EasyMod.js] Target needs to be an object')
+                objTarget.mouse = {m:{x:0,y:0},l:{x:0,y:0}}
+                node.addEventListener('mousemove', e=>{
+                    objTarget.mouse.m.x = e.offsetX,
+                    objTarget.mouse.m.y = e.offsetY
+                })
+                node.addEventListener('mousedown', e=>{
+                    objTarget.mouse.l.x = e.offsetX,
+                    objTarget.mouse.l.y = e.offsetY
+                })
+            },
+            progbar: (node, progress=0, x=4, y=4, width=128, height=32, outwidth=4, fullstyle='#ffffff', emptystyle='#999999', outstyle='#444444', dir=0) => {
+                if (node.localName != 'canvas') throw Error('[EasyMod.js] Element tag is not canvas')
+                var ctx = node.getContext('2d')
+                ctx.fillStyle = outstyle
+                ctx.fillRect(x-outwidth, y-outwidth, width+outwidth*2, height+outwidth*2)
+                ctx.fillStyle = emptystyle
+                ctx.fillRect(x, y, width, height)
+                ctx.fillStyle = fullstyle
+                switch (dir) {
+                    case 0:
+                        ctx.fillRect(x, y, width*progress, height)
+                    break; case 1:
+                        ctx.fillRect(x, y, width, height*progress)
+                    break; case 2:
+                        ctx.fillRect(x+width*(1-progress), y, width*progress, height)
+                    break; case 3:
+                        ctx.fillRect(x, y+height*(1-progress), width, height*progress)
+                    break
+                }
+            },
+            rect: (node, x=0, y=0, w=128, h=128, style='#000000', outwidth=0, outstyle='#222222') => {
+                if (node.localName != 'canvas') throw Error('[EasyMod.js] Element tag is not canvas')
+                var ctx = node.getContext('2d');
+
+                ctx.fillStyle = style
+                ctx.strokeStyle = outstyle
+                ctx.lineWidth = outwidth
+
+                ctx.fillRect(x, y, w, h)
+                if (outwidth) ctx.strokeRect(x, y, w, h)
+            },
+            circle: (node, x=0, y=0, r=16, style='#000000', outwidth=0, outstyle='#222222') => {
+                if (node.localName != 'canvas') throw Error('[EasyMod.js] Element tag is not canvas')
+                var ctx = node.getContext('2d');
+
+                ctx.fillStyle = style
+                ctx.strokeStyle = outstyle
+                ctx.lineWidth = outwidth
+
+                ctx.beginPath();
+                ctx.arc(x, y, r, 0, Math.PI * 2);
+                ctx.fill();
+                if (outwidth) ctx.stroke()
+                ctx.closePath()
+            }
+        }
+    },
+    fractal: (code, int, last) => {
+        var a = code.replaceAll('$r', last)
+        for (var i = 0; i < int; i++) {
+            a = code.replaceAll('$r', a)
+        }
+        return a
+    },
+    eval: (code, isReturn = true) => {
+        return new Function('thisObj', (isReturn ? 'return ' : '') + code)(this)
+    },
+    playaudio: (src, volume=1, speed=1, onload=()=>{})=>{
+        var a = new Audio(src)
+        a.volume = volume
+        a.playbackRate = speed
+        a.onload = onload
+        a.play()
     }
 }
 
-//NUMBERS
+// NUMBERS
 
 Number.prototype.add = function (i) {
     return this + i
@@ -191,14 +360,14 @@ Number.prototype.min = function (...i) {
     i.unshift(this)
     return Math.min.apply(null, i)
 }
-Number.prototype.sin = function () {
-    return Math.sin(this)
+Number.prototype.sin = function (isDeg = false) {
+    return Math.sin(this / (isDeg ? Math.degrad : 1))
 }
-Number.prototype.cos = function () {
-    return Math.cos(this)
+Number.prototype.cos = function (isDeg = false) {
+    return Math.cos(this / (isDeg ? Math.degrad : 1))
 }
-Number.prototype.tan = function () {
-    return Math.tan(this)
+Number.prototype.tan = function (isDeg = false) {
+    return Math.tan(this / (isDeg ? Math.degrad : 1))
 }
 Number.prototype.asin = function () {
     return Math.asin(this)
@@ -362,14 +531,68 @@ Number.prototype.toTimeStr = function (hasMS = false) {
     r[r.length-1] = r[r.length-1].trim()
     return r.join(', ')
 }
+Number.prototype.reverse = function () {
+    var a = this.toString()
+    a = a.reverse()
+    a = a.number()
+    return isNaN(a) ? null : a
+}
+Number.prototype.fitDim = function (dim=2) {
+    return this.nrot(dim).floor().pow(dim)
+}
+Number.prototype.signMul = function (mul=1) {
+    return this.sign().mul(mul)
+}
+Number.prototype.sfloor = function (step=1) {
+    return this.div(step).floor().mul(step)
+}
+Number.prototype.sround = function (step=1) {
+    return this.div(step).round().mul(step)
+}
+Number.prototype.sceil = function (step=1) {
+    return this.div(step).ceil().mul(step)
+}
+Number.prototype.toRGB = function (hasAlpha=false) {
+    var a = [
+        this.div(65536).floor()%256,
+        this.div(256).floor()%256,
+        this.floor()%256,
+    ]
+    if (hasAlpha) a.push(this.div(16777216).floor()%256)
+    return a
+}
+Number.prototype.dist = function (i) {
+    return (this - i).abs()
+}
+Number.prototype.split = function (by = '') {
+    var a = this.toString().split(by)
+    return a.map(v => {
+        return isNaN(Number(v)) ? v : Number(v)
+    })
+}
+Number.prototype.reverseGroups = function (groupSize) {
+    var a = this.split()
+    a = a.reverseGroups(groupSize)
+    return a.joinNum()
+}
+Number.prototype.radtodeg = function () {
+    return this * Math.degrad
+}
+Number.prototype.degtorad = function () {
+    return this / Math.degrad
+}
+Number.prototype.bigint = function () {
+    return BigInt(this)
+}
+
 Number.DIST = Math.log10(Number.MAX_SAFE_INTEGER)/Math.log10(Number.MAX_VALUE)
 
-//BOOLEANS
+// BOOLEANS
 
 Boolean.prototype.ifelse = function (i, e) {
     return this ? i : e
 }
-Boolean.prototype.sw = function () {
+Boolean.prototype.not = function () {
     return !this
 }
 Boolean.prototype.number = function () {
@@ -399,7 +622,7 @@ Boolean.mulor = (...i)=>{
     return r
 }
 
-//STRINGS
+// STRINGS
 
 String.prototype.replaceAt = function(i, e) {
     return this.substr(0, i) + e + this.substr(i + e.length);
@@ -421,8 +644,8 @@ String.prototype.reverse = function () {
     a.reverse()
     return a.join('')
 }
-String.prototype.del = function (rx) {
-    return this.replace(rx, '')
+String.prototype.del = function (id) {
+    return this.substr(0, id) + this.substr(id + 1, this.length - id - 1)
 }
 String.prototype.fitEnd = function (l, f='') {
     l = Math.max(l, 0)
@@ -533,8 +756,84 @@ String.prototype.btoa = function () {
 String.prototype.parse = function () {
     return JSON.parse(this)
 }
+String.prototype.forEach = function (f, array=false) {
+    if (array) {
+        this.split('').forEach(f)
+    } else {
+        for (var i = 0; i < this.length; i++) {
+            f(this[i], i, this)
+        }
+    }
+}
+String.prototype.map = function (f, array=false) {
+    if (array) {
+        var a = this.split('')
+        a.map(f)
+        return a.join('')
+    } else {
+        var a = this
+        for (var i = 0; i < this.length; i++) {
+            a = a.replaceAt(i, f(this[i], i, this))
+        }
+        return a
+    }
+}
+String.prototype.shiftChar = function (amm) {
+    return this.map((v,i)=>{
+        return String.fromCharCode(v.charCodeAt() + amm)
+    })
+}
+String.prototype.number = function () {
+    return Number(this)
+}
+String.prototype.bigint = function () {
+    if (this.getlast() == 'n') {
+        a = this.removeside(true)
+    } else a=this
+    return BigInt(a)
+}
+String.prototype.trimSplit = function (by) {
+    var a = this.split(by)
+    return a.map(v=>{return v.trim()})
+}
+String.prototype.trimSplitJoin = function (by) {
+    var a = this.trimSplit(by)
+    return a.join(by)
+}
+String.prototype.reverseGroups = function (groupSize) {
+    return this.split('').reverseGroups(groupSize).join('')
+}
+String.prototype.removeSplit = function (by, spliceStart, spliceCount, not = false) {
+    var a = this.split(by)
+    if (not) {
+        return a.splice(spliceStart, spliceCount).join(by)
+    } else {
+        a.splice(spliceStart, spliceCount)
+        return a.join(by)
+    }
+}
+String.prototype.getlast = function () {
+    return this[this.length - 1]
+}
+String.prototype.unstricteq = function (i) {
+    return this.toLowerCase() == i.toLowerCase()
+}
+String.prototype.removeside = function (isEnd=true) {
+    return isEnd ? this.del(this.length - 1) : this.del(0)
+}
+String.progress = (length, progress, full='|', empty='.')=>{
+    var a = (length * progress).floor().max(0).min(length),
+        b = length - a, out = ''
+    for (var i = 0; i < a; i++) {
+        out += full
+    }
+    for (var i = 0; i < b; i++) {
+        out += empty
+    }
+    return out
+}
 
-//BIGINT
+// BIGINT
 
 BigInt.prototype.number = function () {
     return Number(this)
@@ -607,7 +906,7 @@ BigInt.prototype.comp = function (i) {
     return (this-BigInt(i)).sign()
 }
 
-//FUNCTIONS
+// FUNCTIONS
 
 Function.prototype.iterate = function (t, i) {
    if (t == 0) {return i;}
@@ -748,8 +1047,24 @@ Function.prototype.addLine = function (...i) {
     a = a.join('\n')
     return a.func()
 }
+Function.prototype.arrayCall = function (args) {
+    return this.apply(this, args)
+}
+Function.prototype.reverseCall = function (...args) {
+    args.reverse()
+    return this.arrayCall(args)
+}
+Function.prototype.iteration = function (start, length) {
+    var out = [], n = start
+    for (var i = 0; i < length; i++) {
+        n = this(n, i, out)
+        out.push(n)
+    }
+    return out
+}
 
-//ARRAYS
+
+// ARRAYS
 
 Array.prototype.pus = function(i) {
    return this.push(i)
@@ -810,25 +1125,36 @@ Array.prototype.valueMap = function (f) {
     func(a)
     return a
 }
-Array.prototype.sum = function () {
+Array.prototype.sum = function (i=0) {
     return this.reduce((p,c)=>{
         return p + c
-    }, 0)
+    }, 0) + i
 }
-Array.prototype.diff = function () {
-   return this.reduce((p,c)=>{
-         return p - c
-   }, 0)
+Array.prototype.sub = function (i=0, op=false) {
+    var a = op ? this.reverse() : this
+    b=a.spliceReturn(0, 1)
+    return b.reduce((p,c)=>{
+        return p - c
+    }, a[0]) - i
 }
-Array.prototype.prod = function () {
+Array.prototype.prod = function (i=1) {
     return this.reduce((p,c)=>{
         return p * c
-    }, 1)
+    }, 1) * i
 }
-Array.prototype.quot = function () {
-   return this.reduce((p,c)=>{
-         return p / c
-   }, 1)
+Array.prototype.quot = function (i=1, op=false) {
+    var a = op ? this.reverse() : this
+    b=a.spliceReturn(0, 1)
+    return b.reduce((p,c)=>{
+        return p / c
+    }, a[0]) / i
+}
+Array.prototype.pow = function (i=1, op=false) {
+    var a = op ? this.reverse() : this
+    b=a.spliceReturn(0, 1)
+    return b.reduce((p,c)=>{
+        return p ** c
+    }, a[0]) ** i
 }
 Array.prototype.onlyFirst = function () {
     var a = this
@@ -896,14 +1222,149 @@ Array.prototype.getIndexes = function (...i) {
     })
     return out
 }
-Array.prototype.max = function () {
-    return Math.max.apply(null, this)
+Array.prototype.max = function (pos = false) {
+    var a = Math.max.apply(null, this)
+    if (pos) {
+        a = this.indexOf(a)
+    }
+    return a
 }
-Array.prototype.min = function () {
-    return Math.min.apply(null, this)
+Array.prototype.min = function (pos = false) {
+    var a = Math.min.apply(null, this)
+    if (pos) {
+        a = this.indexOf(a)
+    }
+    return a
+}
+Array.prototype.split = function (by, value=true, exact=true) {
+    var out = [],
+        a = [],
+        ign = false
+    if (value) {
+        this.forEach((v,i) => {
+            ign = false
+            if (exact ? v === by : v == by) {
+                out.push(a)
+                a = []
+                ign = true
+            }
+            if (!ign) a.push(v)
+        });
+    } else {
+        this.forEach((v,i,ar)=>{
+            if (i%by==0&!(i==0)) {
+                out.push(a)
+                a = []
+            }
+            a.push(v)
+        })
+    }
+    out.push(a)
+    return out
+}
+Array.prototype.joinArray = function (by = []) {
+    var a = this.reduce((p,c)=>{
+        return p.concat(c, by)
+    }, [])
+    if (!(by.length == 0 & Array.isArray(by))) a.pop()
+    return a
+}
+Array.prototype.reverseGroups = function (groupSize) {
+    var a = this.split(groupSize, false)
+    a = a.reverse()
+    return a.joinArray()
+}
+Array.prototype.lastIndexOf = function (i) {
+    return (this.length - 1) - this.reverse().indexOf(i)
+}
+Array.prototype.detect = function (value, exact=true) {
+    var out = []
+    this.forEach((v,i)=>{
+        if (exact ? v === value : v == value) out.push(i)
+    })
+    return out
+}
+Array.prototype.spliceReturn = function (start, length) {
+    var a = this.stringify().parse()
+    a.splice(start, length)
+    return a
+}
+Array.prototype.toRGB = function () {
+    var a = a.flat(),
+        b = a[0].floor() * 65536 + a[1].floor() * 256 + a[2].floor()
+}
+Array.prototype.compare = function (array, exact = false) {
+    if (this.length == array.length) {
+        var out = true
+        this.forEach((v,i)=>{
+            if (exact ? v !== array[i] :v != array[i]) out = false
+        })
+        return out
+    } else {
+        return false
+    }
+}
+Array.prototype.repeat = function (amm) {
+    var a = this
+    for (var i = 0; i < amm - 1; i++) {
+        a = a.concat(this)
+    }
+    return a
+}
+Array.prototype.toObject = function (toString = false) {
+    var out = {}
+    if (toString) {
+    this.forEach((v,i)=>{
+        out[i.toString()] = v
+    })
+    } else {
+        out = Object.assign({}, this)
+    } 
+    return out
+}
+Array.prototype.joinNum = function (by = '') {
+    return Number(this.join(by))
+}
+Array.prototype.mapSum = function (array) {
+    return this.map((v,i)=>{
+        return v + array[i]
+    })
+}
+Array.prototype.mapProd = function (array) {
+    return this.map((v,i)=>{
+        return v * array[i]
+    })
+}
+Array.prototype.mapSub = function (array) {
+    return this.map((v,i)=>{
+        return v - array[i]
+    })
+}
+Array.prototype.mapQuot = function (array) {
+    return this.map((v,i)=>{
+        return v / array[i]
+    })
+}
+Array.prototype.toSave = function () {
+    return this.stringify().btoa()
 }
 
-//OBJECTS
+Array.fromto = (start = 1, end = 10, by = 1)=>{
+    var out = []
+    for (var i = start; i < end + by; i += by) {
+        out.push(i)
+    }
+    return out
+}
+Array.fromwidth = (start = 1, width = 10, by = 1)=>{
+    var out = [], a
+    for (var i = 0; i < width; i ++) {
+        a = i * by + start
+        out.push(a)
+    }
+    return out
+}
+// OBJECTS
 
 Object.prototype.define = function (n, v) {
     this[n] = v
@@ -953,8 +1414,74 @@ Object.prototype.propNames = function (str=false) {
 Object.prototype.stringify = function () {
     return JSON.stringify(this)
 }
+Object.prototype.path = function (pathArray) {
+    var obj = this
+    pathArray.forEach(v=>{
+        obj = obj[v]
+    })
+    return obj
+}
+Object.prototype.sharechd = function (objvar) {
+    keys(this).forEach(v => {
+        objvar[v] = this[v]
+    })
+}
+Object.prototype.removechd = function (...i) {
+    if (i.compare([])) {
+        i = keys(this)
+    }
+    i.forEach(v => {
+        delete this[v]
+    })
+}
+Object.prototype.toSave = function () {
+    return this.stringify().btoa()
+}
+Object.prototype.getLength = function () {
+    return keys(this).length
+}
+Object.prototype.forEach = function (f) {
+    for (var i = 0; i < this.getLength(); i++) {
+        f(this[keys(this)[i]], keys(this)[i], i, this)
+    }
+}
+Object.prototype.map = function (f) {
+    var a = this.stringify().parse()
+    for (var i = 0; i < this.getLength(); i++) {
+        a[keys(this)[i]] = f(a[keys(this)[i]], keys(this)[i], i, this)
+    }
+    return a
+}
+Object.prototype.keyArray = function (stringOnly = false) {
+    return (stringOnly ? Object.keys : keys)(this).map((key) => [key, this[key]]);
+}
+Object.prototype.toArray = function (absolute = false) {
+    if (absolute) {
+        return Object.assign([], this)
+    } else {
+        var out = []
+        keys(this).forEach(v=>{
+            out.push(this[v])
+        })
+        return out
+    }
+}
+Object.prototype.reverse = function () {
+    var out = {}
+    keys(this).reverse().forEach(v => {
+        out[v] = this[v]
+    })
+    return out
+}
+Object.prototype.sort = function () {
+    var out = {}
+    keys(this).sort().forEach(v => {
+        out[v] = this[v]
+    })
+    return out
+}
 
-//ANY
+// ANY
 
 Object.prototype.switchType = function (type, isFunc, useNew=true) {
     if (isFunc) {
@@ -991,11 +1518,14 @@ Object.prototype.switchType = function (type, isFunc, useNew=true) {
         throw Error('[EasyMod.js] 1: type is invalid')
     }
 }
-Object.objThis = function () {
-    return this
+Object.prototype.getType = function () {
+    return typeof this
+}
+Object.prototype.truefy = function () {
+    this.__proto__.shareChildren(this)
 }
 
-//DATE
+// DATE
 
 Date.prototype.since = function (t) {
     t = new Date(t)
@@ -1004,8 +1534,130 @@ Date.prototype.since = function (t) {
 Date.prototype.daysSinceYear = function (t) {
     return (this.getTime() - new Date('year ' + t).getTime()) / 8.64e7
 }
+Date.prototype.add = function (i) {
+    i = new Date(i)
+    return new Date(this.getTime() + i.getTime())
+}
+Date.prototype.sub = function (i) {
+    i = new Date(i)
+    return new Date(this.getTime() - i.getTime())
+}
+Date.prototype.mul = function (i) {
+    i = new Date(i)
+    return new Date(this.getTime() * i.getTime())
+}
+Date.prototype.div = function (i) {
+    i = new Date(i)
+    return new Date(this.getTime() / i.getTime())
+}
+Date.prototype.mod = function (i) {
+    i = new Date(i)
+    return new Date(this.getTime() % i.getTime())
+}
+Date.prototype.getAbsDay = function () {
+    var a = this.getDate(),
+        b = this.getMonth(),
+        l = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
+        m = l.splice(0, b).sum()
+    return a + m - 1
+}
+Date.prototype.toTimeStr = function (hasMS = false) {
+    var a = this.getMilliseconds()
+    var b = this.getSeconds()
+    var c = this.getMinutes()
+    var d = this.getHours()
+    var e = this.getAbsDay()
+    var f = this.getFullYear()
+    var out = []
+    if ((a != 0 | b == 0) & hasMS) out.push(a + ' milliseconds')
+    if (b != 0) out.push(b + ' seconds')
+    if (c != 0) out.push(c + ' minutes')
+    if (d != 0) out.push(d + ' hours')
+    if (e != 0) out.push(e + ' days')
+    if (f != 0) out.push(f + ' years')
+    return out.join(', ')
+}
 
-//Detecting
+// ImageData
+
+ImageData.prototype.arrayfy = function () {
+    var data = this.data
+    var a = Array(4),
+        b = [a].repeat(this.height),
+        c = [b].repeat(this.width)
+    data.forEach((v,i)=>{
+        c[(i/(4*this.height)).floor()][((i/4)%this.height).floor()][i%4] = v
+    })
+    return c
+}
+ImageData.prototype.editpx = function (x, y, color, hasAlpha) {
+    var data = this.data
+    var c = typeof color == 'number' ? [
+        color.div(65536).floor() % 256,
+        color.div(256).floor() % 256,
+        color.floor() % 256,
+        hasAlpha ? (color.div(16777216).floor() % 256) : 255
+    ] : [
+        color[0].floor().max(0).min(255),
+        color[1].floor().max(0).min(255),
+        color[2].floor().max(0).min(255),
+        color[3].floor().max(0).min(255)
+    ]
+
+    data[(x + y * this.width) * 4 + 0] = c[0]
+    data[(x + y * this.width) * 4 + 1] = c[1]
+    data[(x + y * this.width) * 4 + 2] = c[2]
+    data[(x + y * this.width) * 4 + 3] = c[3]
+}
+ImageData.prototype.getpx = function (x, y, hasAlpha=true) {
+    var a = [
+        data[(x + y * this.width) * 4 + 0],
+        data[(x + y * this.width) * 4 + 1],
+        data[(x + y * this.width) * 4 + 2]
+    ]
+    if (hasAlpha) a.push(data[(x + y * this.width) * 4 + 3])
+    return a
+}
+ImageData.prototype.formula = function (f=()=>{}, hasAlpha) {
+    var data = this.data
+    for (var x = 0; x < this.width; x++) {
+        for (var y = 0; y < this.height; y++) {
+            this.editpx(x, y, f(x, y, x + y * this.width, [
+                this.getpx(x,y,hasAlpha)[0],
+                this.getpx(x,y,hasAlpha)[1],
+                this.getpx(x,y,hasAlpha)[2],
+                hasAlpha ? this.getpx(x,y,true)[3] : 255
+            ]), hasAlpha)
+        }
+    }
+    return this
+}
+
+// Math
+
+Math.degrad = 360/(Math.PI*2)
+Math.distance = (x, y) => {
+    if (typeof x != 'object' | typeof y != 'object') throw Error('[EasyMod.js] Both X and Y values needs to be object or array')
+    if (x.length == y.length) {
+        var a = []
+        x.forEach((v,i)=>{
+            a.push([v,y[i]])
+        })
+        a = a.map(v=>{
+            return (v[0] - v[1]) ** 2
+        })
+        return a.sum().sqrt()
+    } else {
+        return NaN
+    }
+}
+Math.chanceTotal = (...i) => {
+    return i.reduce((p,c)=>{
+        return p + 1 / c
+    }, 0)
+}
+
+// Detecting
 document.addEventListener('keydown', e => {
     EasyObj.key.id.code[e.code] = true
     EasyObj.key.id.key[e.key] = true
@@ -1024,3 +1676,12 @@ document.addEventListener('keyup', e => {
 })
 document.addEventListener('mousedown', () => EasyObj.mouseDown = true)
 document.addEventListener('mouseup', () => EasyObj.mouseDown = false)
+
+document.addEventListener('mousemove', e => {
+    EasyObj.doc.msePos.x = e.x
+    EasyObj.doc.msePos.y = e.y
+});
+document.addEventListener('mousedown', e => {
+    EasyObj.doc.lmsePos.x = e.x
+    EasyObj.doc.lmsePos.y = e.y
+});
