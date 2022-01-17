@@ -1113,7 +1113,7 @@ Array.prototype.fitStart = function (l, f='', min) {
 }
 Array.prototype.valueMap = function (f) {
     var func = (i)=>{
-        keys(i).forEach((v,ip)=>{
+        Object.keys(i).forEach((v,ip)=>{
             if (typeof i[v] == 'object') {
                 func(i[v])
             } else {
@@ -1309,7 +1309,7 @@ Array.prototype.repeat = function (amm) {
     for (var i = 0; i < amm - 1; i++) {
         a = a.concat(this)
     }
-    return a
+    return amm == 0 ? [] : a
 }
 Array.prototype.toObject = function (toString = false) {
     var out = {}
@@ -1377,7 +1377,7 @@ Object.prototype.get = function (n) {
 }
 Object.prototype.valueMap = function (f) {
     var func = (i)=>{
-        keys(i).forEach((v,ip)=>{
+        Object.keys(i).forEach((v,ip)=>{
             if (typeof i[v] == 'object') {
                 func(i[v])
             } else {
@@ -1422,13 +1422,13 @@ Object.prototype.path = function (pathArray) {
     return obj
 }
 Object.prototype.sharechd = function (objvar) {
-    keys(this).forEach(v => {
+    Object.keys(this).forEach(v => {
         objvar[v] = this[v]
     })
 }
 Object.prototype.removechd = function (...i) {
     if (i.compare([])) {
-        i = keys(this)
+        i = Object.keys(this)
     }
     i.forEach(v => {
         delete this[v]
@@ -1438,17 +1438,17 @@ Object.prototype.toSave = function () {
     return this.stringify().btoa()
 }
 Object.prototype.getLength = function () {
-    return keys(this).length
+    return Object.keys(this).length
 }
 Object.prototype.forEach = function (f) {
     for (var i = 0; i < this.getLength(); i++) {
-        f(this[keys(this)[i]], keys(this)[i], i, this)
+        f(this[Object.keys(this)[i]], Object.keys(this)[i], i, this)
     }
 }
 Object.prototype.map = function (f) {
     var a = this.stringify().parse()
     for (var i = 0; i < this.getLength(); i++) {
-        a[keys(this)[i]] = f(a[keys(this)[i]], keys(this)[i], i, this)
+        a[Object.keys(this)[i]] = f(a[Object.keys(this)[i]], Object.keys(this)[i], i, this)
     }
     return a
 }
@@ -1460,7 +1460,7 @@ Object.prototype.toArray = function (absolute = false) {
         return Object.assign([], this)
     } else {
         var out = []
-        keys(this).forEach(v=>{
+        Object.keys(this).forEach(v=>{
             out.push(this[v])
         })
         return out
@@ -1468,14 +1468,14 @@ Object.prototype.toArray = function (absolute = false) {
 }
 Object.prototype.reverse = function () {
     var out = {}
-    keys(this).reverse().forEach(v => {
+    Object.keys(this).reverse().forEach(v => {
         out[v] = this[v]
     })
     return out
 }
 Object.prototype.sort = function () {
     var out = {}
-    keys(this).sort().forEach(v => {
+    Object.keys(this).sort().forEach(v => {
         out[v] = this[v]
     })
     return out
