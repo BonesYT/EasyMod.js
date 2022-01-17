@@ -2,7 +2,7 @@
    By BonesYT (start: 19:48 03/01/2022 DD/MM/YYYY)
               (release: 11:58 04/01/2022 DD/MM/YYYY)
               (update: 22:22 16/01/2022 DD/MM/YYYY) <-- edit this as well when modding
-   Last modded by: (no one)
+   Last modded by: BinaryCrown
    EasyMod.js basically adds functions to strings, numbers, etc.
    Please don't copy! 
    
