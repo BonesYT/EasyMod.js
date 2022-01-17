@@ -19,7 +19,7 @@ var EasyObj = {
             number: ['add','sub','inc','dec','mul','div','pow','and','or','xor','mod','inv','doub','half','trip','thir','sqr','sqrt','cb','cbrt','bas','nrot','neg','log','log10','log2','logb','logbr','floor','round','ceil','random','clz32','max','min','sin',
                      'cos','tan','asin','acos','atan','atan2','sinh','cosh','tanh','asinh','acosh','atanh','sign','abs','trunc','log1p','fround','hypot','imul','eq','ex','gt','gte','lt','lte','comp','isNaN','bool','lfloor','lround','lceil','isInf','isFin','isz',
                      'isPos','isNeg','isalt','dti','dtil','array','join','low','infs','toDate','toTimeStr','reverse','fitDim','signMul','sfloor','sround','sceil','toRGB','dist','split','reverseGroups','radtodeg','degtorad','bigint'],
-            boolean: ['ifelse','sw','number','and','or','xor'],
+            boolean: ['ifelse','not','number','and','or','xor'],
             string: ['replaceAt','befj','html','html2','reverse','del','fitEnd','fitStart','loopIncludes','heading','change','toClipboard','func','autoCase','argSplit','isHTML','atob','btoa','parse','forEach','map','shiftChar','number','bigint','trimSplit',
                 'trimSplitJoin','reverseGroups','removeSplit'],
             bigint: ['number','add','sub','inc','dec','mul','div','pow','bas','neg','abs','sign','eq','ex','gt','gte','lt','lte','isz','isPos','isNeg','comp'],
