@@ -13,3 +13,5 @@ date: DD/MM/YYYY
 * Added 3 more array methods and fixed the .min.js thing.
 # VU6 - 16/01/2022 (22:22) | BonesYT
 * Added approx. 74 functions and 661 lines! Modified and added much more functions and also added more to EasyObj!
+# VU7 - 21/01/2022 (22:22) | BonesYT
+* Simplified the code, added more methods and more to EasyObj!
