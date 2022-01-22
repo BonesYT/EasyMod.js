@@ -37,4 +37,4 @@ Helpers/credits (2 users): BonesYT, BinaryCrown
 
 # EasyObj
 * EasyObj is an object with abilities.
-* define, undefine, isDefined, get, createMethod, isConst, protoOf, waitUntil, repeatUntil, key, mouse, isMinimum, addEl, setDef, strict, switchBases, doc, fractal, eval, playaudio, set, time, toReadme
+* define, undefine, isDefined, get, createMethod, isConst, protoOf, waitUntil, repeatUntil, key, mouse, isMinimum, addEl, setDef, strict, switchBases, doc, eval, playaudio, set, time, toReadme
