@@ -1922,7 +1922,13 @@ var EasyObj = {
         EasyObj.mouse.down = false
     })
 
-    add.totalAdds = add.proto.length + add.static.length
+    var addm = 0
+    add.proto.forEach((v)=>{
+        addm += v.length
+    })
+    add.static.forEach((v)=>{
+        addm += v.length
+    })
 
     var time = Date.now()
     setInterval(()=>{
