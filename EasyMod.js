@@ -1447,9 +1447,7 @@ var EasyObj = {
     }
     P.toFunctCmd = function (name='anonymous', str=false, ...args) {
         var a = 
-        `function ${name}(${args.join(',')}) {
-            ${this.map(v=>{return '\t'+v}).join(';\n')}
-        }`
+        `function ${name}(${args.join(',')}) {${this.map(v=>{return '\t'+v}).join(';\n')}}`
         if (str) {
             return a
         } else {
@@ -1458,9 +1456,7 @@ var EasyObj = {
     }
     P.toFunctArgs = function (name='anonymous', cmd, str=false) {
         var a = 
-        `function ${name}(${this.join(',')}) {
-            ${cmd}
-        }`
+        `function ${name}(${this.join(',')}) {\n${cmd}\n}`
         if (str) {
             return a
         } else {
@@ -1929,6 +1925,7 @@ var EasyObj = {
     add.static.forEach((v)=>{
         addm += v.length
     })
+    add.totalAdds = addm
 
     var time = Date.now()
     setInterval(()=>{
