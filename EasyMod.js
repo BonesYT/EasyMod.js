@@ -1547,7 +1547,7 @@ var EasyObj = {
         })
         return a
     }
-    P.propNames = function (str=false) {
+    P.propNames = function (str=true) {
         return str ? Object.keys(this) : keys(this)
     }
     P.stringify = function () {
@@ -1726,7 +1726,7 @@ var EasyObj = {
         return funct(this, typeof this)
     }
     P.isType = function (type) {
-        return type == typeof this
+        return type == this.type
     }
     P.toNumber = function () {
         return Number(this)
@@ -1898,8 +1898,8 @@ var EasyObj = {
     });
 
     document.addEventListener('wheel', (e) => {
-        EasyObj.mouse.scr.y = e.deltaY
-        y = EasyObj.mouse.scrs.y = EasyObj.mouse.scr.y.sign()
+        EasyObj.mouse.scr = e.deltaY
+        y = EasyObj.mouse.scrs = EasyObj.mouse.scr.sign()
     })
     document.addEventListener('mousedown', (e) => {
         switch (e.which) {
@@ -1931,5 +1931,13 @@ var EasyObj = {
     setInterval(()=>{
         EasyObj.time = Date.now() - time
     }, 10)
+
+    //Type method
+    Number.prototype.type = 'number'
+    Boolean.prototype.type = 'boolean'
+    String.prototype.type = 'string'
+    BigInt.prototype.type = 'bigint'
+    Object.prototype.type = 'object'
+    Symbol.prototype.type = 'symbol'
 
 })() // 93.2% from 1k to 2k!    (if modding update this lol)
