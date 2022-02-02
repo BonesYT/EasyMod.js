@@ -16,7 +16,8 @@
 
 var config = {
     keycompress: false, // Set this to true if you want to use less memory (might lag more)
-    isNode: false // Activate this if you're using node.js (can avoid errors but will remove document stuff)
+    isNode: false, // Activate this if you're using node.js (can avoid errors but will remove document stuff)
+    allowsetint: true // Turn this off to disallow setInterval on startup.
 }
 
 var EasyObj = {
@@ -305,7 +306,8 @@ var EasyObj = {
         e: ['}', ']', ')', '"', "'", '`']
     },
     random: undefined,
-    isNode: config.isNode
+    isNode: config.isNode,
+    setint: config.allowsetint
 }
 
 delete config // not really necessary lol
@@ -1134,7 +1136,6 @@ delete config // not really necessary lol
         var c = a
         var step = [0].repeat(group.length), d = ''
         while (!(((step.sum() == 0) & a != c) | this[a] == undefined)) {
-            console.log(a, this[a], step, d)
             if (group == until & this[a] == group) {
                 if (step[0] == 0) step[0] = 1;
                 else if (this.detectRepeats(endignore, a, true) % 2 == 0) step[0] = 0
@@ -1215,7 +1216,6 @@ delete config // not really necessary lol
         if (start.length != end.length) throw RangeError('[EasyMod.js] both start and end needs to have equal length')
         var a = '', b = [], c = [0].repeat(start.length), d = ''
         for (var i = 0; i < this.length; i++) {
-            console.log(c,by,i,this.hasFirst(by,i),c.sum()==0)
             if (this.hasFirst(by,i) & c.sum() == 0) {
                 b.push(a)
                 a = ''
@@ -1564,7 +1564,6 @@ delete config // not really necessary lol
     P.getArgs = function () {
         if (this.toString()[0] != 'f' & this.toString()[0] != '(') return this.toString().cutLast([' ', '='])
         return this.toString().untilPrt('(', '(', ')', 1, 2).untilSplitPrt(',',EasyObj.prt.s, EasyObj.prt.e).mapTrim().map(v => {
-            console.log(v)
             return v.cutLast([' ', '='])
         })
     }
@@ -2663,7 +2662,7 @@ delete config // not really necessary lol
     }
 
     // Clipboard info reading (was hard to program this lol
-    if (!EasyObj.isNode) setInterval(async ()=>{
+    if (!EasyObj.isNode & EasyObj.setint) setInterval(async ()=>{
         try {
             if (EasyObj.clipb.allow) {
                 await navigator.clipboard.read().then(async v=>{
@@ -2678,7 +2677,7 @@ delete config // not really necessary lol
             }
         } catch {}
     }, 25)
-    setInterval(()=>{ // Random value between 0 and 1. Set once every script.
+    if (EasyObj.setint) setInterval(()=>{ // Random value between 0 and 1. Set once every script.
         EasyObj.random = Math.random()
     }, 10)
 
@@ -2692,7 +2691,7 @@ delete config // not really necessary lol
     add.totalAdds = addm
 
     var time = Date.now()
-    setInterval(()=>{
+    if (EasyObj.setint) setInterval(()=>{
         EasyObj.time = Date.now() - time
     }, 10)
 
