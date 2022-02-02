@@ -743,7 +743,7 @@ delete config // not really necessary lol
     }
     P.modabs = function (i) {
         var a = this.abs().mod(i)
-        return (this.isNeg() ? 8 - a : a) % i
+        return (this.isNeg() ? i - a : a) % i
     }
     P.toLocaleString2 = function () {
         return this.toLocaleString().split('').exclude(',').join('')
