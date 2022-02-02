@@ -21,6 +21,7 @@ var config = {
 
 var EasyObj = {
     info: {
+        version: '8',
         createdBy: "BonesYT", // Author
         modders: [ // All people that modified/forked this
             "BinaryCrown"
