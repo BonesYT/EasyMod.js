@@ -1,25 +1,40 @@
 /* This is EasyMod.js
    By BonesYT (start: 19:48 03/01/2022 DD/MM/YYYY)
               (release: 11:58 04/01/2022 DD/MM/YYYY)
-              (update: 22:22 21/01/2022 DD/MM/YYYY) <-- edit this as well when modding
+              (update: 11:28 02/02/2022 DD/MM/YYYY) <-- edit this as well when modding
    Last modded by: (no one)
    EasyMod.js basically adds functions to strings, numbers, etc.
    Please don't copy! 
    
    NOTE: if you're modding/forking this, just remember, also change the .min.js file and in that file,
-   change the EasyMod.isMinimum variable to true!
-   Also, if there's a new function/type, please add it to EasyObj.added.changed array!
+   change the EasyObj.info.isMin variable to true!
+   Also, if there's a new function/type, please add it to EasyObj.info.a.changed array!
    
    */
 
 // EasyMod's Object
 
+var config = {
+    keycompress: false, // Set this to true if you want to use less memory (might lag more)
+    isNode: false // Activate this if you're using node.js (can avoid errors but will remove document stuff)
+}
+
 var EasyObj = {
-    added: {
-        proto: {}, // Added prototype functions lists
-        static: {}, // Added static values lists
-        changed: ['Number','Boolean','String','BigInt','Function','Array','Object','Date','ImageData','Math'],
-        totalAdds: undefined // Total proto/static adds
+    info: {
+        createdBy: "BonesYT", // Author
+        modders: [ // All people that modified/forked this
+            "BinaryCrown"
+        ],
+        lastBy: "BonesYT", // Last edited by
+        a: { // All adds
+            proto: {}, // Added prototype functions lists
+            static: {}, // Added static values lists
+            changed: ['Number','Boolean','String','BigInt','Function','Array','Object','Date','ImageData','Math'],
+            totalAdds: undefined // Total proto/static adds
+        },
+        from: 'https://github.com/BonesYT/EasyMod.js',
+        issues: 'https://github.com/BonesYT/EasyMod.js/issues',
+        isMin: false // Change this to true only in EasyMod.min.js
     },
     define: (n, v)=>{
         this[n] = v
@@ -51,7 +66,7 @@ var EasyObj = {
                 return true
             }
         } catch {
-            throw Error('[EasyMod.js] 0: ' + varname + ' is not defined')
+            throw ReferenceError('[EasyMod.js] 0: ' + varname + ' is not defined')
         }
     },
     protoOf: (type)=>{
@@ -81,8 +96,7 @@ var EasyObj = {
             if (key == 'any' | key == -1) return EasyObj.key.id.any
             return EasyObj.key.id.code[key] | EasyObj.key.id.key[key] | EasyObj.key.id.num[key]
         },
-        // Set this to true if you want to use less memory (might lag more)
-        compressed: false
+        compressed: config.keycompress
     },
     mouse: {
         ldown: false, // left button down?
@@ -93,7 +107,6 @@ var EasyObj = {
         scr: 0, // scroll speed per tick
         scrs: 0 // same as scroll but sign'd
     },
-    isMinimum: false,
     addEL(type, func, ...options) {
         var a = [type, func]
         a.push.apply(a, options)
@@ -104,7 +117,7 @@ var EasyObj = {
             return p == undefined ? c : p
         }, undefined)
     },
-    strict: {
+    stc: {
         abseq: (x, y)=>{
             if (typeof x == typeof y) {
                 switch (typeof x) {
@@ -143,16 +156,12 @@ var EasyObj = {
             return typeof x == typeof y ? x <= y : false
         },
     },
-    switchBases(input = '10', from = 10, to = 2) {
-        var a = parseInt(input, from)
-        return a.toString(to)
-    },
     doc: {
         msePos: {x: 0, y: 0},
         lmsePos: {x: 0, y: 0},
         buttonClick(node, f=()=>{}) {
-            if (node.localName != 'button') throw Error('[EasyMod.js] Element tag is not button')
-            if (!(typeof f == 'function')) throw Error('[EasyMod.js] onclick needs to be an function')
+            if (node.localName != 'button') throw TypeError('[EasyMod.js] Element tag is not button')
+            if (!(typeof f == 'function')) throw TypeError('[EasyMod.js] onclick needs to be an function')
             node.addEventListener('click', f)
         },
         setGetElementById(name='$') {
@@ -162,8 +171,8 @@ var EasyObj = {
         },
         canv: {
             canvasMsePos(node, objTarget) {
-                if (node.localName != 'canvas') throw Error('[EasyMod.js] Element tag is not canvas')
-                if (!typeof objTarget == 'object') throw Error('[EasyMod.js] Target needs to be an object')
+                if (node.localName != 'canvas') throw TypeError('[EasyMod.js] Element tag is not canvas')
+                if (!typeof objTarget == 'object') throw TypeError('[EasyMod.js] Target needs to be an object')
                 objTarget.mouse = {m:{x:0,y:0},l:{x:0,y:0}}
                 node.addEventListener('mousemove', e=>{
                     objTarget.mouse.m.x = e.offsetX,
@@ -175,7 +184,7 @@ var EasyObj = {
                 })
             },
             progbar(node, progress=0, x=4, y=4, width=128, height=32, outwidth=4, fullstyle='#ffffff', emptystyle='#999999', outstyle='#444444', dir=0) {
-                if (node.localName != 'canvas') throw Error('[EasyMod.js] Element tag is not canvas')
+                if (node.localName != 'canvas') throw TypeError('[EasyMod.js] Element tag is not canvas')
                 var ctx = node.getContext('2d')
                 ctx.fillStyle = outstyle
                 ctx.fillRect(x-outwidth, y-outwidth, width+outwidth*2, height+outwidth*2)
@@ -195,7 +204,7 @@ var EasyObj = {
                 }
             },
             rect(node, x=0, y=0, w=128, h=128, style='#000000', outwidth=0, outstyle='#222222') {
-                if (node.localName != 'canvas') throw Error('[EasyMod.js] Element tag is not canvas')
+                if (node.localName != 'canvas') throw TypeError('[EasyMod.js] Element tag is not canvas')
                 var ctx = node.getContext('2d');
 
                 ctx.fillStyle = style
@@ -206,7 +215,7 @@ var EasyObj = {
                 if (outwidth) ctx.strokeRect(x, y, w, h)
             },
             circle(node, x=0, y=0, r=16, style='#000000', outwidth=0, outstyle='#222222') {
-                if (node.localName != 'canvas') throw Error('[EasyMod.js] Element tag is not canvas')
+                if (node.localName != 'canvas') throw TypeError('[EasyMod.js] Element tag is not canvas')
                 var ctx = node.getContext('2d');
 
                 ctx.fillStyle = style
@@ -221,10 +230,10 @@ var EasyObj = {
             }
         },
         effect(name, value=1, target=document.querySelector('html')) {
-            this.style.filter = `${name}(${value})`
+            target.style.filter = `${name}(${value})`
         },
         setinner(target, innerHTML) {
-            if (!(typeof target == 'object' & target.toString().includes('HTML'))) throw Error('[EasyMod.js] Target has to be an HTML element')
+            if (!(typeof target == 'object' & target.toString().includes('HTML'))) throw TypeError('[EasyMod.js] Target has to be an HTML element')
             target.innerHTML = innerHTML
         }
     },
@@ -254,34 +263,63 @@ var EasyObj = {
     time: 0, // milliseconds since page got open
     toReadme: {
         part(id) {
-            return `# ${id}\n${EasyObj.added.proto[id].length==0?'':'* '+EasyObj.added.proto[id].join(', ')+'\n'}${EasyObj.added.static[id].length==0?'':'* static: '+EasyObj.added.static[id].join(', ')+'\n'}`
+            return `# ${id}\n${EasyObj.info.a.proto[id].length==0?'':'* '+EasyObj.info.a.proto[id].sort().join(', ')+'\n'}${EasyObj.info.a.static[id].length==0?'':'* static: '+EasyObj.info.a.static[id].sort().join(', ')+'\n'}`
         },
         full() {
             var a = '# Extra Methods and statics\n',
                 b = EasyObj.toReadme.part
-            EasyObj.added.proto.forEach((v,i)=>{
+            EasyObj.info.a.proto.forEach((v,i)=>{
                 a += b(i)
             })
+            a += '\n' + EasyObj.toReadme.easyobj()
             return a
+        },
+        easyobj() {
+            return `# EasyObj\n* EasyObj is an object with abilities.\n* ${Object.keys(EasyObj).join(', ')}`
         }
-    }
+    },
+    aver(...i) {
+        return i.sum() / i.length
+    },
+    clipb: {
+        info: '',
+        allow: false // Enable this if you want to allow EasyMod.js to read clipboard (will need permission from user)
+    },
+    type(type, ...values) {
+        switch (type) {
+            case 'number': return Number(values[0])
+            case 'boolean': return Boolean(values[0])
+            case 'string': return String(values[0])
+            case 'bigint': return BigInt(values[0])
+            case 'object': return Object(values[0])
+            case 'symbol': return Symbol(values[0])
+            case 'function': return Function.apply(null, values)
+            case 'array': return Array.apply(null, values)
+            case 'undefined': return undefined
+        }
+    },
+    errors: ['Error','RangeError','ReferenceError','SyntaxErrror','TypeError','URIError','EvalError'],
+    prt: {
+        s: ['{', '[', '(', '"', "'", '`'],
+        e: ['}', ']', ')', '"', "'", '`']
+    },
+    random: undefined,
+    isNode: config.isNode
 }
+
+delete config // not really necessary lol
 
 // Method creating function (needed so all the variables in here are local)
 ;(function(){
 
-    var add = EasyObj.added
+    var add = EasyObj.info.a
 
     // Send new methods to types/functions
-    function AddObj(target, proto, static, name) {
-        Object.keys(proto).forEach(v=>{
-            target.prototype[v] = proto[v]
-            add.proto[target.name || name].push(v)
-        })
-        Object.keys(static).forEach(v=>{
-            target[v] = static[v]
-            add.static[target.name || name].push(v)
-        })
+    function AddObj(target, proto={}, static={}, name) {
+        EasyObj.info.a.proto[name] = Object.keys(proto)
+        EasyObj.info.a.static[name] = Object.keys(static)
+        if (target.prototype) Object.assign(target.prototype, proto)
+        Object.assign(target, static)
     }
 
     // Start the prototype and static list
@@ -362,6 +400,9 @@ var EasyObj = {
     P.nrot = function (i) {
         return this ** (1 / i)
     }
+    P.nrotr = function (i) {
+        return i ** (1 / this)
+    }
     P.neg = function (i=0) {
         return i - this
     }
@@ -391,6 +432,9 @@ var EasyObj = {
     }
     P.random = function (i=0) {
         return Math.random() * (this - i) + i
+    }
+    P.randomn = function () {
+        return this.random(-this)
     }
     P.clz32 = function () {
         return Math.clz32(this)
@@ -448,6 +492,9 @@ var EasyObj = {
     P.abs = function () {
         return Math.abs(this)
     }
+    P.absn = function () {
+        return Math.abs(this) * -1
+    }
     P.trunc = function () {
         return Math.trunc(this)
     }
@@ -463,12 +510,6 @@ var EasyObj = {
     }
     P.imul = function (i) {
         return Math.imul(this, i)
-    }
-    P.eq = function (i) {
-        return this == i
-    }
-    P.ex = function (i) {
-        return this + 0 === i
     }
     P.gt = function (i) {
         return this > i
@@ -491,14 +532,17 @@ var EasyObj = {
     P.bool = function () {
         return Boolean(this)
     }
-    P.lfloor = function (i=10) {
-        return this.logb(i).floor().bas(i)
+    P.floatFix = function (i=12) { // fixes precision
+        return Math.round(this * 10 ** i) / 10 ** i
+    }
+    P.lfloor = function (i=10) { // Def: l means logarithm
+        return this.logb(i).floatFix().floor().bas(i)
     }
     P.lround = function (i=10) {
-        return this.logb(i).round().bas(i)
+        return this.logb(i).floatFix().round().bas(i)
     }
     P.lceil = function (i=10) {
-        return this.logb(i).ceil().bas(i)
+        return this.logb(i).floatFix().ceil().bas(i)
     }
     P.isInf = function () {
         return this == Infinity
@@ -515,12 +559,12 @@ var EasyObj = {
     P.isNeg = function (e) {
         return e ? this <= 0 : this < 0
     }
-    P.isalt = function (i=1) {
+    P.isalt = function (i=1) { // Def: is absolute less than x?
         return this.abs().lt(i)
     }
-    P.dti = function () {
+    P.dti = function (i) { // Def: decimal to integer
         var dec = this % 1
-        while (dec % 1 != 0) {
+        while (dec % 1 > (i || 0.00001)) {
             dec *= 10
         }
         return dec
@@ -542,7 +586,7 @@ var EasyObj = {
         }
         return a + (e ? b : 0)
     }
-    P.infs = function () {
+    P.infs = function () { // Def: Infinities
         return Math.log10(this)/Math.log10(Number.MAX_VALUE)
     }
     P.toDate = function () {
@@ -571,6 +615,25 @@ var EasyObj = {
         r[r.length-1] = r[r.length-1].trim()
         return r.join(', ')
     }
+    P.toTimeStr2 = function (hasMS = false, hasDays = false) {
+        if (isNaN(this)) return null
+        var a = this % 1e3,
+            b = Math.floor(this/1e3)%60,
+            c = Math.floor(this/6e4)%60,
+            d = Math.floor(this/3.6e6)%(hasDays?24:Infinity),
+            e = Math.floor(this/8.64e7)%365,
+            f = Math.floor(this/3.1536e10)
+        var r = ''
+        if (hasMS) r += '.' + a.toString().padStart(3, '0')
+        r = ':' + b.toString().padStart(2, '0') + r
+        r = ':' + c.toString().padStart(2, '0') + r
+        r = (hasDays ? ':' : '') + d.toString().padStart(2, '0') + r
+        if (hasDays) {
+            r = ':' + e.toString().padStart(3, '0') + r
+            r = f + r
+        }
+        return r
+    }
     P.reverse = function () {
         var a = this.toString()
         a = a.reverse()
@@ -583,14 +646,14 @@ var EasyObj = {
     P.signMul = function (mul=1) {
         return this.sign().mul(mul)
     }
-    P.sfloor = function (step=1) {
-        return this.div(step).floor().mul(step)
+    P.sfloor = function (step=1) { // Def: s means step
+        return step == 0 ? this + 0 : this.div(step).floatFix().floor().mul(step)
     }
     P.sround = function (step=1) {
-        return this.div(step).round().mul(step)
+        return step == 0 ? this + 0 : this.div(step).floatFix().round().mul(step)
     }
     P.sceil = function (step=1) {
-        return this.div(step).ceil().mul(step)
+        return step == 0 ? this + 0 : this.div(step).floatFix().ceil().mul(step)
     }
     P.toRGB = function (hasAlpha=false) {
         var a = [
@@ -624,7 +687,7 @@ var EasyObj = {
     P.hasDec = function () {
         return this % 1 != 0
     }
-    P.limz = function () {
+    P.limz = function () { // Def: limit zero
         return this.max(0)
     }
     P.location = function (from, to) {
@@ -663,12 +726,101 @@ var EasyObj = {
         if (t >= 1e10) o.push(c)
         return o
     }
+    P.toStringFix = function (step=0.01, emax=6, emin=-6) {
+        if (this.isNaN()) return 'NaN'
+        if (this.isz()) return '0'
+        var a = this.abs(),
+            b = this.min(1).lfloor(10), c
+        if (a >= 10 ** emax | a <= 10 ** emin) {
+            c = a.div(a.lfloor(10)).sfloor(step).floatFix() + 'e' + a.log10().floor()
+        } else {
+            c = a.sfloor(step * b).floatFix()
+        }
+        return (this.isNeg() ? '-' : '') + c
+    }
+    P.modabs = function (i) {
+        var a = this.abs().mod(i)
+        return (this.isNeg() ? 8 - a : a) % i
+    }
+    P.toLocaleString2 = function () {
+        return this.toLocaleString().split('').exclude(',').join('')
+    }
+    P.divf = function (i) {
+        return (this / i).floor()
+    }
+    P.mix = function (i) {
+        return (this + i) / 2
+    }
+    P.divisors = function () {
+        var out = []
+        for (var i = 0; i < this / 2 + 1; i++) {
+            if (this / i % 1 == 0) out.push(this / i)
+        }
+        out.push(1)
+        return out
+    }
+    P.thres = function (maxat=1, equal=true) {
+        var a = this.floor()
+            b = this.modabs(1)
+        return (equal ? b >= maxat : b > maxat) ? a + 1 : a
+    }
+    P.sthres = function (step=1, maxat=1, equal=true) {
+        return this.div(step).thres(maxat, equal) * step
+    }
+    P.lthres = function (step=10, maxat=1, equal=true) {
+        return this.logb(step).floatFix().thres(maxat, equal).bas(step)
+    }
+    P.fromCharCode = function () {
+        return String.fromCharCode(this)
+    }
+    P.triareaIsos = function (w, h) {
+        return w * h / 2
+    }
+    P.triareaEqui = function (w) {
+        return (0.75).sqrt() * w ** 2
+    }
+    P.rs = function (i) { // Def: right shift
+        return this >> i
+    }
+    P.ls = function (i) { // Def: left shift
+        return this << i
+    }
+    P.rsu = function (i) { // Def: unsigned right shift
+        return this >>> i
+    }
+    P.digitAt = function (i) {
+        return (this.abs() % 10 ** (i + 1) / 10 ** i).floatFix(7).floor() % 10
+    }
+    P.toStringWrite = function (hasIllions=true, flipSym=false) {
+        var n = this.isNeg(),
+            d = this.abs().log10().floor(),
+            e = this.abs().dti()
+            f = e.log10().floor()
+        var a = '0'.repeat(d.max(0) + 1).map((v,i) => {
+            return this.abs().toNumber().digitAt(d - i).toString()
+        })
+        if (hasIllions) a = a.putevery(flipSym ? '.' : ',', 4, a.length % 3, 0)
+        var b = '0'.repeat(f.max(0) + 1).map((v,i) => {
+            return e.toNumber().digitAt(f.max(0) - i).toString()
+        })
+        return (n ? '-' : '') + a + (b == '0' ? '' : (flipSym ? ',' : '.') + b)
+    }
+    P.sdi = function (isDecAbs=true) { // Def: sign, decimal, integer
+        return [this.sign(), isDecAbs ? this.modabs(1) : (this % 1).abs(), this.floor()]
+    }
+    P.to0x = function () {
+        return '0x' + this.toString(16)
+    }
     
     S.DIST = Math.log10(Number.MAX_SAFE_INTEGER)/Math.log10(Number.MAX_VALUE)
+    S.BIT32 = 2 ** 31 - 1
+    S.BIT64 = 2 ** 63 - 1
     
-    AddObj(Number, P, S)
+    AddObj(Number, P, S, 'Number')
     P = {}, S = {}
     
+    // NUMBERS End
+
     // BOOLEANS
     
     P.ifelse = function (i, e) {
@@ -686,24 +838,30 @@ var EasyObj = {
     P.xor = function (i) {
         return Boolean(this ^ i)
     }
+    P.pon = function () { // Def: Positive or negative
+        return this ? 1 : -1
+    }
+
     S.muland = (...i)=>{
         var r = true
         i.forEach(v => {
-            r.and(v)
+            r = r.and(v)
         })
         return r
     }
     S.mulor = (...i)=>{
         var r = false
         i.forEach(v => {
-            r.or(v)
+            r = r.or(v)
         })
         return r
     }
     
-    AddObj(Boolean, P, S)
+    AddObj(Boolean, P, S, 'Boolean')
     P = {}, S = {}
     
+    // BOOLEANS End
+
     // STRINGS
     
     P.replaceAt = function(i, e) {
@@ -866,7 +1024,7 @@ var EasyObj = {
         })
     }
     P.bigintFix = function () {
-        if (this.getlast() == 'n') {
+        if (this.last() == 'n') {
             a = this.removeside(true)
         } else a=this
         return BigInt(a)
@@ -891,10 +1049,10 @@ var EasyObj = {
             return a.join(by)
         }
     }
-    P.getlast = function () {
+    P.last = function () {
         return this[this.length - 1]
     }
-    P.unstricteq = function (i) {
+    P.unstreq = function (i) {
         return this.toLowerCase() == i.toLowerCase()
     }
     P.removeside = function (isEnd=true) {
@@ -907,9 +1065,406 @@ var EasyObj = {
         }
         return a
     }
-    P.repeatDec = function (amm) {
+    P.repeatDec = function (amm=1) {
         var a = this.repeat(Number(amm + 1).limz())
         return a.substr(0, a.length - this.length * (1 - (amm % 1)))
+    }
+    P.findFirst = function (target, lastCounts = false) {
+        if (Array.isArray(target)) {
+            var a = [], b
+            target.forEach(v=>{
+                b = this.split('').indexOf(v)
+                a.push(lastCounts ? (b == -1 ? this.length : b) : b)
+            })
+            return a.min()
+        } else {
+            var a = this.split('').indexOf(target)
+            return lastCounts ? (a == -1 ? this.length : a) : a
+        }
+    }
+    P.findLast = function (target, lastCounts = false) {
+        if (Array.isArray(target)) {
+            var a = [], b
+            target.forEach(v=>{
+                b = this.split('').reverse().indexOf(v).neg(this.length).sub(1)
+                a.push(lastCounts ? (b == -1 ? this.length : b) : b)
+            })
+            return a.max()
+        } else {
+            var a = this.split('').reverse().indexOf(target).neg(this.length).sub(1)
+            return lastCounts ? (a == -1 ? this.length : a) : a
+        }
+    }
+    P.cutFirst = function (pos, isLast=0) {
+        if (typeof pos == 'string' | Array.isArray(pos)) {
+            pos = isLast ? this.findLast(pos, 1) : this.findFirst(pos, 1)
+        }
+        return this.substr(pos, this.length - pos)
+    }
+    P.cutLast = function (pos, isLast=0) {
+        if (typeof pos == 'string' | Array.isArray(pos)) {
+            pos = this.length - (isLast ? this.findLast(pos, 1) : this.findFirst(pos, 1))
+        }
+        return this.substr(0, this.length - pos)
+    }
+    P.until = function (start=0, until='', mode=0, strmode=0) {
+        if (typeof start == 'string') {
+            start = this.findFirst(start)
+        }
+        var a = this.substr(start + (strmode>=2?1:0)),
+            b = this.length - a.length
+            c = a.findFirst(until, 1) + b,
+            d = a.substr(0, a.findFirst(until, 1) + (strmode==1?1:0))
+        return mode ? d : c
+    }
+    P.untilPrt = function (start=0, group='{', until='}', mode, strmode=0, strignore=true, endignore='\\') {
+        if (typeof start == 'string') {
+            start = this.findFirst(start)
+        }
+        if (group != until & !Array.isArray(group) & !Array.isArray(until)) {
+            group = [group]
+            until = [until]
+        }
+        var b = '', a = start
+        while (!group.includes(this[a]) & this[a] != undefined) {
+            b += this[a]
+            a++
+        }
+        var c = a
+        var step = [0].repeat(group.length), d = ''
+        while (!(((step.sum() == 0) & a != c) | this[a] == undefined)) {
+            console.log(a, this[a], step, d)
+            if (group == until & this[a] == group) {
+                if (step[0] == 0) step[0] = 1;
+                else if (this.detectRepeats(endignore, a, true) % 2 == 0) step[0] = 0
+            } else {
+                if (group.includes(this[a]) & until.includes(this[a])) {
+                    if (strignore) {
+                        if (d == this[a]) {
+                            if (this.detectRepeats(endignore, a, true) % 2 == 0) {
+                                d = ''
+                                step[group.indexOf(this[a])] = 0
+                            }
+                        } else {
+                            if (d == '') d = this[a]
+                            step[group.indexOf(this[a])] = 1
+                        }
+                    } else {
+                        step[group.indexOf(this[a])] = 1 - step[group.indexOf(this[a])]
+                    }
+                } else {
+                    if (group.includes(this[a]) & d == '') step[group.indexOf(this[a])]++
+                    if (until.includes(this[a]) & d == '') step[until.indexOf(this[a])]--
+                }
+            }
+            b += this[a]
+            a++
+        }
+        if (strmode != 1) b = b.cutLast(1)
+        if (strmode == 2) b = b.substr(1)
+        return mode ? b : a - 1
+    }
+    P.untilStrav = function (until='"', avoider='\\') { // Def: strav = string end avoider
+        var w = until
+        if (!until.isArray()) until = [until]
+        until = this.findFirst(until, 1)
+        var end = this.whichFirst.apply(this, [0].concat(w))
+        var a = until, b = ''
+        while (!(this[a] == end & (this.detectRepeats(avoider, a, true) % 2 == 0) & (a != until)) & this[a] != undefined) {
+            b += this[a]
+            a++
+        }
+        return b
+    }
+    P.hasFirst = function (target, offset=0, mode) {
+        if (!Array.isArray(target)) target = [target]
+        var r = false, a = '', t = this.cutFirst(offset)
+        target.forEach(v => {
+            if (t.substr(0, v.length) == v) {
+                r = true
+                if (a == '') a = v
+            }
+        })
+        return mode ? [r, a] : r
+    }
+    P.untilSplit = function (by, start='"', end='"') {
+        if (!Array.isArray(start)) start = [start]
+        if (!Array.isArray(end)) end = [end]
+        var a = '', b = [], c = true
+        for (var i = 0; i < this.length; i++) {
+            if (this.substr(i).hasFirst(by,1)[0] & c) {
+                b.push(a)
+                a = ''
+                i += this.substr(i).hasFirst(by,1)[1].length
+            }
+            if (start.includes(this[i]) & end.includes(this[i])) {
+                c = !c
+            } else {
+                if (start.includes(this[i])) c = false
+                if (end.includes(this[i])) c = true
+            }
+            a += this[i]
+        }
+        b.push(a)
+        return b
+    }
+    P.untilSplitPrt = function (by, start='{', end='}', strignore=true, endignore='\\') {
+        if (!Array.isArray(start)) start = [start]
+        if (!Array.isArray(end)) end = [end]
+        if (start.length != end.length) throw RangeError('[EasyMod.js] both start and end needs to have equal length')
+        var a = '', b = [], c = [0].repeat(start.length), d = ''
+        for (var i = 0; i < this.length; i++) {
+            console.log(c,by,i,this.hasFirst(by,i),c.sum()==0)
+            if (this.hasFirst(by,i) & c.sum() == 0) {
+                b.push(a)
+                a = ''
+                i += this.hasFirst(by,i,1)[1].length
+            }
+            if (start.includes(this[i]) & end.includes(this[i])) {
+                if (strignore) {
+                    if (d == this[i]) {
+                        if (this.detectRepeats(endignore, i, true) % 2 == 0) {
+                            d = ''
+                            c[start.indexOf(this[i])] = 0
+                        }
+                    } else {
+                        d = this[i]
+                        c[start.indexOf(this[i])] = 1
+                    }
+                } else {
+                    c[start.indexOf(this[i])] = 1 - c[start.indexOf(this[i])]
+                }
+            } else {
+                if (start.includes(this[i]) & d == '') c[start.indexOf(this[i])]++
+                if (end.includes(this[i]) & d == '') c[end.indexOf(this[i])]--
+            }
+            a += this[i]
+        }
+        b.push(a)
+        return b
+    }
+    P.shift = function (pos, ...strs) {
+        pos = pos.floor()
+        var a = this.concat.arrayCall(this, strs) + this,
+            l = strs.map(v => {
+                return v.length
+            }).sum() + this.length
+        return a.substr(pos.modabs(l), this.length)
+    }
+    P.exclude = function (...i) {
+        var a = this
+        i.forEach(v => {
+            a = a.replaceAll(i, '')
+        })
+        return a
+    }
+    P.put = function (at=0, str) {
+        return this.substr(0, at) + str + this.substr(at)
+    }
+    P.delmul = function (start=0, width=1) {
+        return this.substr(0, start) + this.substr(start + width)
+    }
+    P.detectRepeats = function (str, at, isRev=false) {
+        if (str == '') return 0
+        var a = 0, b = at
+        if (isRev) b -= str.length
+        while (this.hasFirst(str, b)) {
+            b += str.length * (isRev ? -1 : 1)
+            a++
+        }
+        return a
+    }
+    P.merge = function ( ...str) {
+        var length = str.map(v => {return v.length}).sum() + this.length,
+            out = '',
+            array = [this].concat(str)
+        for (var i = 0; i < length; i++) {
+            out += array[i % array.length][(i / array.length).floor()] || ''
+        }
+        return out
+    }
+    P.replaceMul = function (to, array) {
+        var out = this
+        array.forEach(v => {
+            out = out.replaceAt(v, to)
+        })
+        return out
+    }
+    P.allowIf = function (f=()=>{}) {
+        var a = ''
+        this.forEach((v,i) => {
+            if (f(v, i)) a += v
+        })
+        return a
+    }
+    P.findCount = function (str, abs = false, isArray = false) {
+        if (str == '') return isArray ? [] : 0
+        var out = isArray ? [] : 0
+        for (var i = 0; i < this.length - (str.length - 1); i++) {
+            if (this.hasFirst(str, i)) {
+                if (isArray) out.push(i)
+                else out++
+                if (!abs) i += str.length - 1
+            }
+        }
+        return out
+    }
+    P.corrupt = function (prob=0.2, ampli=2) {
+        return this.map(v => {
+            return Math.random() < prob ? (v.charCodeAt() + ampli.randomn()).fromCharCode() : v
+        })
+    }
+    P.isUpperCase = function (index=0) {
+        var a = this[index]
+        return a.toLowerCase() != a
+    }
+    P.isLowerCase = function (index=0) {
+        var a = this[index]
+        return a.toUpperCase() != a
+    }
+    P.switchCase = function () {
+        return this.map(v => {
+            return v.isUpperCase() ? v.toLowerCase() : v.toUpperCase()
+        })
+    }
+    P.isLetter = function (index=0) {
+        return !(!this.isUpperCase(index) & !this.isLowerCase(index))
+    }
+    P.whichFirst = function (mode=0, ...str) {
+        var a
+        for (var i = 0; i < this.length; i++) {
+            str.forEach(v => {
+                if (this.hasFirst(v, i)) a = mode ? [v, i] : v
+            })
+            if (a) return a
+        }
+        return -1
+    }
+    P.toSymbol = function (benull = false) {
+        if (this.hasFirst('Symbol(') & this.last() == ')') {
+            return Symbol(this.substr(7).cutLast(1))
+        } else {
+            return benull ? null : Symbol()
+        }
+    }
+    P.detectType = function (isType = false) {
+        var a
+        if (this == 'NaN') a = NaN;
+        else if (this == 'undefined') a = undefined;
+        else if (this == 'null') a = null;
+        else if (this == 'false') a = false;
+        else if (this == 'true') a = true;
+        else {
+            a = Number(this)
+            if (isNaN(a)) {
+                try {
+                    a = this.bigintFix()
+                } catch {
+                    a = this.toSymbol(true)
+                    if (!a)
+                    try {
+                        a = this.parse()
+                    } catch {
+                        a = this + ''
+                    }
+                }
+            }
+        }
+        return isType ? a.type : a
+    }
+    P.evalWorks = function () {
+        try {
+            Function(this)
+            return true 
+        } catch {
+            return false
+        }
+    }
+    P.error = function (type=0, isThrow=true) {
+        if (typeof type == 'string') type = EasyObj.errors.indexOf(type)
+        var a
+        switch (type) {
+            case 0: a = Error(this); break
+            case 1: a = RangeError(this); break
+            case 2: a = ReferenceError(this); break
+            case 3: a = SyntaxError(this); break
+            case 4: a = TypeError(this); break
+            case 5: a = URIError(this); break
+            case 6: a = EvalError(this); break
+        }
+        if (isThrow) {
+            throw a
+        } else {
+            return a
+        }
+    }
+    P.eqlength = function (str) {
+        return this.length == str.length
+    }
+    P.putevery = function (str, every, offset, allow0=true) {
+        var a = this + '', b = offset
+        while (b < a.length) {
+            if (allow0 ? true : b != 0) a = a.put(b, str)
+            if (allow0 ? false : b == 0) b--
+            b += every
+        }
+        return a
+    }
+    P.splitMul = function (arr) {
+        if (!Array.isArray(arr)) arr = [arr]
+        var a = [this+'']
+        arr.forEach(x => {
+            a = a.map(y => {return y.split(x)}).flat()
+        })
+        return a.flat()
+    }
+    P.setLocStr = function (name) { // Def: LocStr = Local Storage
+        localStorage.setItem(name, this)
+    }
+    P.setCookie = function (name, time, returnStr=false) {
+        var e = time ? "; expires=" + new Date().add(time).toUTCString() : "",
+            a = name + "=" + (this.toString() || "")  + e + "; path=/";
+        if (returnStr) return a;
+        else document.cookie = a
+    }
+    P.toHTML = function (getInside=true) {
+        var a = new DOMParser()
+	    var b = a.parseFromString(this, 'text/html')
+        var c = b.body
+        if (getInside) return c.querySelector('*') // get first element
+	    return c;
+    }
+    P.toHexCode = function (utf=8, joinby='') {
+        if (utf!==8&utf!==16) '[EasyMod.js] Incorrect UTF type'.error(4)
+        return this.split('').map(v => {
+            return v.charCodeAt().toString(16).padStart(utf / 4, '0')
+        }).join(joinby)
+    }
+    P.splitEvery = function (every=1, offset=0) {
+        var a = [], b = ''
+        for (var i=0;i<this.length;i++) {
+            if ((i + offset) % every == 0) {
+                a.push(b)
+                b = ''
+            }
+            b += this[i]
+        }
+        if (a[0]=='') a.shift()
+        a.push(b)
+        return a
+    }
+    P.baseSwt = function (from = 10, to = 2) { // Def: base switch
+        var a = parseInt(this, from)
+        return a.toString(to)
+    },
+    P.parseInt = function (from = 16) {
+        return parseInt(this, from)
+    }
+    P.hexToString = function (utf=8, splitter='') {
+        if (utf!==8&utf!==16) '[EasyMod.js] Incorrect UTF type'.error(4)
+        return (splitter == '' ? this.splitEvery(utf / 4) : this.split(splitter)).map(v => {
+            return v.parseInt().fromCharCode()
+        }).join('')
     }
 
     S.progress = (length, progress, full='|', empty='.')=>{
@@ -925,10 +1480,12 @@ var EasyObj = {
     }
     S.blank = ''
     
-    AddObj(String, P, S)
+    AddObj(String, P, S, 'String')
     P = {}, S = {}
     
-    // BIGINT
+    // STRINGS End
+
+    // BIGINTS
     
     P.add = function (i) {
         return this + BigInt(i)
@@ -967,12 +1524,6 @@ var EasyObj = {
         a = a.sign()
         return BigInt(a)
     }
-    P.eq = function (i) {
-        return this == i
-    }
-    P.ex = function (i) {
-        return this + 0n === i
-    }
     P.gt = function (i) {
         return this > i
     }
@@ -998,143 +1549,53 @@ var EasyObj = {
         return (this-BigInt(i)).sign()
     }
     
-    AddObj(BigInt, P, S)
+    AddObj(BigInt, P, S, 'BigInt')
     P = {}, S = {}
     
+    // BIGINTS End
+
     // FUNCTIONS
     
     P.iterate = function (t, i) {
        if (t == 0) {return i;}
        else {return this(this.iterate(t-1,i));}
     }
-    
     P.getArgs = function () {
-        var s=this.toString(),
-            i=1,
-            a='',
-            p=0
-        if (s[0]=='f') {
-            var q = 1
-            while (!(s[0]=='('|(s[0]==' '&q==0))) {
-                s=s.slice(1)
-                if (s[0]==' '&q==1) {
-                    q=0
-                    s=s.slice(1)
-                }
-            }
-        }
-        if (s[0]!='(') {
-            i=0
-            while (s[i]!='='|p!=0){
-                a += s[i]
-                if (s[i]=='(') p++
-                if (s[i]==')') p--
-                if (s[i]=='{') p++
-                if (s[i]=='}') p--
-                i++
-            }
-        } else {
-            while (s[i]!=')'|p!=0){
-                a += s[i]
-                if (s[i]=='(') p++
-                if (s[i]==')') p--
-                i++
-            }
-        }
-        a=a.split(',')
-        a=a.map(v=>{
-            var a = v.trimStart()
-            a = a.replace(/(?<==).*/gm, '')
-            if (a.includes('=')) a = a.slice(0, -1)
-            return a
+        if (this.toString()[0] != 'f' & this.toString()[0] != '(') return this.toString().cutLast([' ', '='])
+        return this.toString().untilPrt('(', '(', ')', 1, 2).untilSplitPrt(',',EasyObj.prt.s, EasyObj.prt.e).mapTrim().map(v => {
+            console.log(v)
+            return v.cutLast([' ', '='])
         })
-        if (a.length==1&a[0]=='') {
-            return []
-        }
-        return a
     }
     P.getArgsAll = function () {
-        var s=this.toString(),
-            i=1,
-            a='',
-            p=0
-        if (s[0]=='f') {
-            var q = 1
-            while (!(s[0]=='('|(s[0]==' '&q==0))) {
-                s=s.slice(1)
-                if (s[0]==' '&q==1) {
-                    q=0
-                    s=s.slice(1)
-                }
-            }
-        }
-        if (s[0]!='(') {
-            i=0
-            while (s[i]!='='|p!=0){
-                a += s[i]
-                if (s[i]=='(') p++
-                if (s[i]==')') p--
-                if (s[i]=='{') p++
-                if (s[i]=='}') p--
-                i++
-            }
-        } else {
-            while (s[i]!=')'|p!=0){
-                a += s[i]
-                if (s[i]=='(') p++
-                if (s[i]==')') p--
-                i++
-            }
-        }
-        a=a.split(',')
-        a=a.map(v=>{
-            return v.trimStart()
-        })
-        if (a.length==1&a[0]=='') {
-            return []
-        }
-        return a
+        if (this.toString()[0] != 'f' & this.toString()[0] != '(') return this.toString().cutLast([' ', '='])
+        return this.toString().untilPrt('(', '(', ')', 1, 2).untilSplitPrt(',', EasyObj.prt.s, EasyObj.prt.e).mapTrim()
     }
-    P.getCommand = function () {
-        var s=this.toString(),
-            i=1,
-            p=0
-        if (s[0]=='f') {
-            var q = 1
-            while (!(s[0]=='('|(s[0]==' '&q==0))) {
-                s=s.slice(1)
-                if (s[0]==' '&q==1) {
-                    q=0
-                    s=s.slice(1)
-                }
+    P.getCmd = function (mode) {
+        if (this.toString()[0] != 'f' & this.toString()[0] != '(') {
+            var b = this.toString().substr(this.toString().untilPrt(0, '(', ')', 1, 1)+1).cutFirst(['=','{']), z = false
+            while ([' ','=','>'].includes(b[0])) {
+                b = b.cutFirst(1)
             }
-        }
-        if (s[0]!='(') {
-            i=0
-            while (s[i]!='='|p!=0){
-                if (s[i]=='(') p++
-                if (s[i]==')') p--
-                if (s[i]=='{') p++
-                if (s[i]=='}') p--
-                i++
-            }
+            if (b[0] != '{') z = true
+            var a = b.untilPrt(0, EasyObj.prt.s, EasyObj.prt.e, 1, z ? 1 : 2)
+            if (mode >= 1) a = a.split('\n')
+            if (mode >= 2 & mode < 4) a = a.mapTrim()
+            if (mode >= 3) c = c.exclude('')
+            return a
         } else {
-            while (s[i]!=')'|p!=0){
-                if (s[i]=='(') p++
-                if (s[i]==')') p--
-                i++
+            var a = this.toString().untilPrt(0, '(', ')', 1, 1), z = false,
+                b = this.toString().cutFirst(a.length)
+            while ([' ','=','>'].includes(b[0])) {
+                b = b.cutFirst(1)
             }
+            if (b[0] != '{') z = true
+            var c = b.untilPrt(0, EasyObj.prt.s, EasyObj.prt.e, 1, z ? 1 : 2)
+            if (mode >= 1) c = c.split('\n')
+            if (mode >= 2 & mode < 4) c = c.mapTrim()
+            if (mode >= 3) c = c.exclude('')
+            return c
         }
-        i+=s[0]=='('?(s[i+1]==' '?3:(s[i+1]=='{'?2:4)):3
-        p=0
-        var a=''
-        while (s[i]!='}'|p!=0) {
-            a += s[i]
-            if (s[i]=='{') p++
-            if (s[i]=='}') p--
-            i++
-        }
-        return a
     }
     P.addLine = function (...i) {
         var a = this.getCommand()
@@ -1142,25 +1603,63 @@ var EasyObj = {
         a = a.join('\n')
         return a.func()
     }
-    P.arrayCall = function (args) {
-        return this.apply(this, args)
+    P.arrayCall = function (This=this, args) {
+        return this.apply(This, args)
     }
     P.reverseCall = function (...args) {
         args.reverse()
         return this.arrayCall(args)
     }
-    P.iteration = function (start, length) {
+    P.iteration = function (start, length, onlyres=true) {
         var out = [], n = start
         for (var i = 0; i < length; i++) {
             n = this(n, i, out)
             out.push(n)
         }
-        return out
+        return onlyres ? out.last() : out
+    }
+    P.lagrun = function (amm) {
+        var a = Date.now()
+        for (var i = 0; i < amm; i++) {
+            this(i)
+        }
+        return Date.now() - a
+    }
+    P.setArgs = function (array = []) {
+        array.push(this.getCommand(4).join('\n'))
+        return Function.apply(null, array)
+    }
+    P.setCmd = function (cmdstr = '') {
+        var a = this.getArgsAll()
+        a.push(cmdstr)
+        return Function.apply(null, a)
+    }
+    P.evalrun = function (This=this, ...args) {
+        args = args.map(v => {return eval(v)})
+        this.apply(This, args)
+    }
+    P.void = function () {
+        return void this()
+    }
+    P.trycatch = function (catchfunc, isreturn=false) {
+        try {
+            if (isreturn) {
+                this()
+                return true
+            } else {
+                return this()
+            }
+        } catch (e) {
+            catchfunc(e)
+            return isreturn ? undefined : false
+        }
     }
     
-    AddObj(Function, P, S)
+    AddObj(Function, P, S, 'Function')
     P = {}, S = {}
     
+    // FUNCTIONS End
+
     // ARRAYS
     
     P.pus = function(i) {
@@ -1252,14 +1751,6 @@ var EasyObj = {
         return b.reduce((p,c)=>{
             return p ** c
         }, a[0]) ** i
-    }
-    P.onlyFirst = function () {
-        var a = this
-        return a.shift()
-    }
-    P.onlyLast = function () {
-        var a = this
-        return a.shift()
     }
     P.gate = function () {
         var a = 0
@@ -1411,9 +1902,9 @@ var EasyObj = {
     P.toObject = function (toString = false) {
         var out = {}
         if (toString) {
-        this.forEach((v,i)=>{
-            out[i.toString()] = v
-        })
+            this.forEach((v,i)=>{
+                out[i.toString()] = v
+            })
         } else {
             out = Object.assign({}, this)
         } 
@@ -1483,6 +1974,96 @@ var EasyObj = {
             e = a * 10 ** d
         return e * this[0]
     }
+    P.joinb = function () {
+        return this.join('')
+    }
+    P.numToStr = function () {
+        return this.map(v => {
+            return String.fromCharCode(v)
+        }).join('')
+    }
+    P.mapTrim = function (mode = 0) {
+        return this.map(v => {
+            switch (mode) {
+                case 0: return v.trim()
+                case 1: return v.trimStart()
+                case 2: return v.trimEnd()
+            }
+        })
+    }
+    P.last = function () {
+        return this[this.length - 1]
+    }
+    P.indexOfAll = function (input) {
+        var a = []
+        this.forEach((v,i) => {
+            if (v === input) a.push(i)
+        })
+        return a
+    }
+    P.exclude = function (...i) {
+        var a = []
+        this.forEach(v => {
+            if (!i.includes(v)) a.push(v)
+        })
+        return a
+    }
+    P.defaultAll = function () {
+        return this.map(v => {
+            return v.default()
+        })
+    }
+    P.allowIf = function (f=()=>{}) {
+        var a = []
+        this.forEach((v,i) => {
+            if (f(v, i)) a.push(v)
+        })
+        return a
+    }
+    P.sortNum = function (isRev=false) {
+        this.sort((a, b) => {
+            return a - b;
+        });
+        if (isRev) this.reverse()
+        return this
+    }
+    P.allowProb = function (chance, isIndex = false, equalLength = false) {
+        if (equalLength) {
+            var out = isIndex ? this.getKeys().map(v => {return Number(v)}) : this.clone(),
+                a = Math.ceil(this.length * (1 - chance))
+            for (var i = 0; i < a; i++) {
+                out.splice(out.length.random().floor(), 1)
+            }
+        } else {
+            var out = []
+            this.forEach((v,i) => {
+                if (Math.random() < chance) out.push(isIndex ? i : v)
+            })
+        }
+        return out
+    }
+    P.ruleFrac = function (iter) { // fractal with rule numbers
+        iter = iter.floor()
+        if (iter <= 0) return [0]
+        if (iter == 1) return this
+        var a, b = this
+        for (var i = 0; i < iter - 1; i++) {
+            a = []
+            for (var x = 0; x < this.length; x++) {
+                a = a.concat(b.map(v => {return v + this[x]}))
+            }
+            b = a
+        }
+        return a
+    }
+    P.removeRepeats = function () {
+        return this.onlyAllow.apply(this,[0].concat(this.detectRepeats(1)))
+    }
+    P.grad = function (i) { // Def: gradient
+        if (i == this.length) return this[this.length]
+        var a = i % 1, b = i.floor()
+        return this[b] * (1 - a) + this[b + 1] * a
+    }
     
     S.fromto = (start = 1, end = 10, by = 1)=>{
         var out = []
@@ -1499,17 +2080,39 @@ var EasyObj = {
         }
         return out
     }
+    S.formula = (f=()=>{}, dim=1, w=16, h=1, l=1, array=[]) => {
+        var out
+        switch (dim) {
+            case 1: out = [0].repeat(w); break
+            case 2: out = [[0].repeat(h)].repeat(w).clone(); break
+            case 3: out = [[[0].repeat(l)].repeat(h)].repeat(w).clone(); break
+        }
+        for (var z = 0; z < (dim<3?1:l); z++) {
+            for (var y = 0; y < (dim<2?1:h); y++) {
+                for (var x = 0; x < w; x++) {
+                    switch (dim) {
+                        case 1: out[x] = f(x, 0, 0, w, 1, 1, array); break
+                        case 2: out[x][y] = f(x, y, 0, w, h, 1, array); break
+                        case 3: out[x][y][z] = f(x, y, z, w, h, l, array); break
+                    }
+                }
+            }
+        }
+        return out
+    }
     
-    AddObj(Array, P, S)
+    AddObj(Array, P, S, 'Array')
     P = {}, S = {}
     
+    // ARRAYS End
+
     // OBJECTS
     
     P.define = function (n, v) {
         this[n] = v
     }
-    P.undefine = function (n) {
-        delete this[n]
+    P.delete = function (n) {
+        return delete this[n]
     }
     P.get = function (n) {
         return this[n]
@@ -1553,7 +2156,7 @@ var EasyObj = {
     P.stringify = function () {
         return JSON.stringify(this)
     }
-    P.path = function (pathArray) {
+    P.path = function (...pathArray) {
         var obj = this
         pathArray.forEach(v=>{
             obj = obj[v]
@@ -1591,8 +2194,8 @@ var EasyObj = {
         }
         return a
     }
-    P.keyArray = function (stringOnly = false) {
-        return (stringOnly ? Object.keys : keys)(this).map((key) => [key, this[key]]);
+    P.entries = function (stringOnly = false) {
+        return Object.entries(this) 
     }
     P.toArray = function (absolute = false) {
         if (absolute) {
@@ -1660,7 +2263,7 @@ var EasyObj = {
         })
         return a
     }
-    P.keys = function () {
+    P.getKeys = function () {
         return Object.keys(this)
     }
     P.includes = function (val, isPropName=false) {
@@ -1678,13 +2281,39 @@ var EasyObj = {
         })
         return a >= amm
     }
+    P.merge = function (obj) {
+        return Object.assign(this, obj)
+    }
+    P.assignTo = function (obj) {
+        return Object.assign(obj, this)
+    }
+    P.clone = function (way=0) {
+        switch (way) {
+            case 0: return this.stringify().parse()
+            case 1: return {...this}
+            case 2: return Object.assign({}, this)
+        }
+    }
+    P.dupli = function (target, name) {
+        this[name] = this[target]
+    }
+    P.allowIf = function (f=()=>{}) {
+        var a = {}
+        this.propNames().forEach((v,i) => {
+            if (f(this[v], v, i)) a[v] = this[v]
+        })
+        return a
+    }
+    P.clonepr = function (target, into) {
+        this[into] = this[target]
+    }
     
     // ANY
     
     P.switchType = function (type, isFunc, useNew=true) {
         if (isFunc) {
             if (self[type] == undefined) {
-                throw Error('[EasyMod.js] 1: type is invalid')
+                throw TypeError('[EasyMod.js] 1: type is invalid')
             } else {
                 try {
                     if (!useNew) throw Error(' is not a constructor')
@@ -1713,16 +2342,22 @@ var EasyObj = {
                 case 'symbol': return Symbol(this); break
                 case 'undefined': return undefined; break
             }
-            throw Error('[EasyMod.js] 1: type is invalid')
+            throw TypeError('[EasyMod.js] 1: type is invalid')
         }
     }
     P.getType = function () {
         return typeof this
     }
     P.truefy = function () {
-        this.__proto__.shareChildren(this)
+        if (this.type == 'object') {
+            this.__proto__.sharechd(this)
+        } else {
+            var a = {index: this}
+            this.__proto__.sharechd(a)
+            return a
+        }
     }
-    P.modify = function (funct) {
+    P.effect = function (funct) {
         return funct(this, typeof this)
     }
     P.isType = function (type) {
@@ -1734,10 +2369,62 @@ var EasyObj = {
     P.toBigInt = function () {
         return BigInt(this)
     }
+    P.default = function () {
+        switch (this.type) {
+            case 'number': return 0
+            case 'string': return ''
+            case 'bigint': return 0n
+            case 'boolean': return false
+            case 'function': return function(){}
+            case 'object':
+                if (Array.isArray(this)) {
+                    return []
+                } else return {}
+        }
+    }
+    P.isArray = function () {
+        return Array.isArray(this)
+    }
+    P.unnew = function (objectClone=true) {
+        switch (this.type) {
+            case 'number': return this + 0
+            case 'string': return this + ''
+            case 'bigint': return this + 0n
+            case 'boolean': return Number(this) ? true : false
+            case 'object': return objectClone ? this.clone(1) : this
+        }
+        return this
+    }
+    P.newfy = function () {
+        return Object(this)
+    }
+    P.effect = function (funct) {
+        return funct(this)
+    }
+    P.ciu = function (i=0) { // Def: Change if undefined
+        return this ?? i
+    }
+    P.eq = function (i) {
+        return this.unnew() == i.unnew()
+    }
+    P.ex = function (i) {
+        return this.unnew() === i.unnew()
+    }
+    P.eqn = function (i) {
+        return this.unnew() != i.unnew()
+    }
+    P.exn = function (i) {
+        return this.unnew() !== i.unnew()
+    }
+    P.isArray = function () {
+        return Array.isArray(this)
+    }
     
-    AddObj(Object, P, S)
+    AddObj(Object, P, S, 'Object')
     P = {}, S = {}
     
+    // OBJECTS End
+
     // Date
     
     P.since = function (t) {
@@ -1763,13 +2450,13 @@ var EasyObj = {
         return a + m - 1
     }
     P.toTimeStr = function (hasMS = false) {
-        var a = this.getMilliseconds()
-        var b = this.getSeconds()
-        var c = this.getMinutes()
-        var d = this.getHours()
-        var e = this.getAbsDay()
-        var f = this.getFullYear()
-        var out = []
+        var a = this.getMilliseconds(),
+            b = this.getSeconds(),
+            c = this.getMinutes(),
+            d = this.getHours(),
+            e = this.getAbsDay(),
+            f = this.getFullYear(),
+            out = []
         if ((a != 0 | b == 0) & hasMS) out.push(a + ' milliseconds')
         if (b != 0) out.push(b + ' seconds')
         if (c != 0) out.push(c + ' minutes')
@@ -1779,9 +2466,11 @@ var EasyObj = {
         return out.join(', ')
     }
     
-    AddObj(Date, P, S)
+    AddObj(Date, P, S, 'Date')
     P = {}, S = {}
     
+    // DATE End
+
     // ImageData
     
     P.arrayfy = function () {
@@ -1794,7 +2483,7 @@ var EasyObj = {
         })
         return c
     }
-    P.editpx = function (x, y, color, hasAlpha) {
+    P.editpx = function (x=0, y=0, color=[0,0,0,0], hasAlpha) {
         var data = this.data
         var c = typeof color == 'number' ? [
             color.div(65536).floor() % 256,
@@ -1837,14 +2526,16 @@ var EasyObj = {
         return this
     }
     
-    AddObj(ImageData, P, S)
+    AddObj(ImageData, P, S, 'ImageData')
     P = {}, S = {}
     
+    // IMAGEDATA End
+
     // Math
     
     S.degrad = 360/(Math.PI*2)
     S.distance = (x, y) => {
-        if (typeof x != 'object' | typeof y != 'object') throw Error('[EasyMod.js] Both X and Y values needs to be object or array')
+        if (typeof x != 'object' | typeof y != 'object') throw TypeError('[EasyMod.js] Both X and Y values needs to be object or array')
         if (x.length == y.length) {
             var a = []
             x.forEach((v,i)=>{
@@ -1863,60 +2554,130 @@ var EasyObj = {
             return p + 1 / c
         }, 0)
     }
+    S.average = (...i) => {
+        return i.sum() / i.length
+    }
+    S.averagelog = (...i) => {
+        return i.prod().nrot(i.length)
+    }
+    S.maxuntil = (array, max) => {
+        var m = max / array.max()
+        return array.map(v => {return v * m})
+    }
+    S.minuntil = (array, min) => {
+        var m = min / array.min()
+        return array.map(v => {return v * m})
+    }
+    S.maxindex = (...values) => {
+        return values.indexOf(Math.max.apply(null, values))
+    }
+    S.minindex = (...values) => {
+        return values.indexOf(Math.min.apply(null, values))
+    }
+    S.closest = (array, to, mode) => {
+        var a = array.map(v => (v - to).abs())
+        return mode ? Math.minindex.apply(null, a) : array[Math.minindex.apply(null, a)]
+    }
+    S.farthest = (array, to, mode) => {
+        var a = array.map(v => (v - to).abs())
+        return mode ? Math.maxindex.apply(null, a) : array[Math.maxindex.apply(null, a)]
+    }
+    S.isIns1 = (x, bx=0, bw=1) => {
+        return !! (x >= bx & x < bx + bw)
+    }
+    S.isIns2 = (x, y, bx=0, by=0, bw=1, bh=1) => {
+        return !! (x >= bx & y >= by & x < bx + bw & y < by + bh)
+    }
+    S.isIns3 = (x, y, z, bx=0, by=0, bz=0, bw=1, bh=1, bl=1) => {
+        return !! (x >= bx & y >= by & z >= bz & x < bx + bw & y < by + bh & z < bz + bl)
+    }
+    S.isBetw = (x, a, b, mode=0) => {
+        return !! ((mode%2==0 ? x >= a : x > a) & (mode/2<1 ? x <= a : x < a))
+    }
+    S.findNext = (x, y) => {
+        return y - x + y
+    }
+    S.findNext3 = (x, y, z) => {
+        return z * 3 - y * 3 + x
+    }
     
     AddObj(Math, P, S, 'Math')
+
+    // MATH End
     
     // Detecting
-    document.addEventListener('keydown', e => {
-        EasyObj.key.id.code[e.code] = true
-        EasyObj.key.id.key[e.key] = true
-        EasyObj.key.id.num[e.keyCode] = true
-        EasyObj.key.id.any = true
-    })
-    document.addEventListener('keyup', e => {
-        if (EasyObj.key.compressed) {
-            delete EasyObj.key.id.code[e.code]
-            delete EasyObj.key.id.key[e.key]
-            delete EasyObj.key.id.num[e.keyCode]
-        } else {
-            EasyObj.key.id.code[e.code] = false
-            EasyObj.key.id.key[e.key] = false
-            EasyObj.key.id.num[e.keyCode] = false
-        }
-        EasyObj.key.id.any = false
-    })
-    document.addEventListener('mousedown', () => EasyObj.mouseDown = true)
-    document.addEventListener('mouseup', () => EasyObj.mouseDown = false)
+    if (!EasyObj.isNode) {
+        document.addEventListener('keydown', e => {
+            EasyObj.key.id.code[e.code] = true
+            EasyObj.key.id.key[e.key] = true
+            EasyObj.key.id.num[e.keyCode] = true
+            EasyObj.key.id.any = true
+        })
+        document.addEventListener('keyup', e => {
+            if (EasyObj.key.compressed) {
+                delete EasyObj.key.id.code[e.code]
+                delete EasyObj.key.id.key[e.key]
+                delete EasyObj.key.id.num[e.keyCode]
+            } else {
+                EasyObj.key.id.code[e.code] = false
+                EasyObj.key.id.key[e.key] = false
+                EasyObj.key.id.num[e.keyCode] = false
+            }
+            EasyObj.key.id.any = false
+        })
+        document.addEventListener('mousedown', () => EasyObj.mouseDown = true)
+        document.addEventListener('mouseup', () => EasyObj.mouseDown = false)
+        
+        document.addEventListener('mousemove', e => {
+            EasyObj.doc.msePos.x = e.x
+            EasyObj.doc.msePos.y = e.y
+        });
+        document.addEventListener('mousedown', e => {
+            EasyObj.doc.lmsePos.x = e.x
+            EasyObj.doc.lmsePos.y = e.y
+        });
     
-    document.addEventListener('mousemove', e => {
-        EasyObj.doc.msePos.x = e.x
-        EasyObj.doc.msePos.y = e.y
-    });
-    document.addEventListener('mousedown', e => {
-        EasyObj.doc.lmsePos.x = e.x
-        EasyObj.doc.lmsePos.y = e.y
-    });
+        document.addEventListener('wheel', (e) => {
+            EasyObj.mouse.scr = e.deltaY
+            y = EasyObj.mouse.scrs = EasyObj.mouse.scr.sign()
+        })
+        document.addEventListener('mousedown', (e) => {
+            switch (e.which) {
+                case 1: EasyObj.mouse.ldown = true; EasyObj.mouse.sdown = true; break
+                case 2: EasyObj.mouse.mdown = true; break
+                case 3: EasyObj.mouse.rdown = true; EasyObj.mouse.sdown = true; break
+            }
+            EasyObj.mouse.down = true
+        })
+        document.addEventListener('mouseup', (e) => {
+            switch (e.which) {
+                case 1: EasyObj.mouse.ldown = false; EasyObj.mouse.sdown = false; break
+                case 2: EasyObj.mouse.mdown = false; break
+                case 3: EasyObj.mouse.rdown = false; EasyObj.mouse.sdown = false; break
+            }
+            EasyObj.mouse.down = false
+        })
+    }
 
-    document.addEventListener('wheel', (e) => {
-        EasyObj.mouse.scr = e.deltaY
-        y = EasyObj.mouse.scrs = EasyObj.mouse.scr.sign()
-    })
-    document.addEventListener('mousedown', (e) => {
-        switch (e.which) {
-            case 1: EasyObj.mouse.ldown = true; EasyObj.mouse.sdown = true; break
-            case 2: EasyObj.mouse.mdown = true; break
-            case 3: EasyObj.mouse.rdown = true; EasyObj.mouse.sdown = true; break
-        }
-        EasyObj.mouse.down = true
-    })
-    document.addEventListener('mouseup', (e) => {
-        switch (e.which) {
-            case 1: EasyObj.mouse.ldown = false; EasyObj.mouse.sdown = false; break
-            case 2: EasyObj.mouse.mdown = false; break
-            case 3: EasyObj.mouse.rdown = false; EasyObj.mouse.sdown = false; break
-        }
-        EasyObj.mouse.down = false
-    })
+    // Clipboard info reading (was hard to program this lol
+    if (!EasyObj.isNode) setInterval(async ()=>{
+        try {
+            if (EasyObj.clipb.allow) {
+                await navigator.clipboard.read().then(async v=>{
+                    try {
+                        await v[0].getType('text/plain').then(v=>{
+                            v.text().then(v=>EasyObj.clipb.info=v)
+                        })
+                    } catch {
+                        EasyObj.clipb.info = null
+                    }
+                })
+            }
+        } catch {}
+    }, 25)
+    setInterval(()=>{ // Random value between 0 and 1. Set once every script.
+        EasyObj.random = Math.random()
+    }, 10)
 
     var addm = 0
     add.proto.forEach((v)=>{
@@ -1940,4 +2701,4 @@ var EasyObj = {
     Object.prototype.type = 'object'
     Symbol.prototype.type = 'symbol'
 
-})() // 93.2% from 1k to 2k!    (if modding update this lol)
+})() // 70.4% from 2k to 3k!    (if modding update this lol)

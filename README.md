@@ -3,38 +3,37 @@ EasyMod.js by BonesYT, a library that adds a variety methods into JS!
 
 This adds a lot of methods to: strings, numbers, booleans, bigint, functions, arrays, objects and date!
 
-Version: VU7
+Version: VU8
 VU = Version Update 
 
 Helpers/credits (2 users): BonesYT, BinaryCrown
 
 # Extra Methods and statics
 # Number
-* add, sub, inc, dec, mul, div, pow, and, or, xor, mod, inv, doub, half, trip, thir, sqr, sqrt, cb, cbrt, bas, nrot, neg, log, log10, log2, logb, logbr, floor, round, ceil, random, clz32, max, min, sin, cos, tan, asin, acos, atan, atan2, sinh, cosh, tanh, asinh, acosh, atanh, sign, abs, trunc, log1p, fround, hypot, imul, eq, ex, gt, gte, lt, lte, comp, isNaN, bool, lfloor, lround, lceil, isInf, isFin, isz, isPos, isNeg, isalt, dti, dtil, join, low, infs, toDate, toTimeStr, reverse, fitDim, signMul, sfloor, sround, sceil, toRGB, dist, split, reverseGroups, radtodeg, degtorad, hasDec, limz, location, ellip2, ellip3, divabs, getdec, separate, loga
-* static: DIST
+* abs, absn, acos, acosh, add, and, asin, asinh, atan, atan2, atanh, bas, bool, cb, cbrt, ceil, clz32, comp, cos, cosh, dec, degtorad, digitAt, dist, div, divabs, divf, divisors, doub, dti, dtil, ellip2, ellip3, fitDim, floatFix, floor, fromCharCode, fround, getdec, gt, gte, half, hasDec, hypot, imul, inc, infs, inv, isFin, isInf, isNaN, isNeg, isPos, isalt, isz, join, lceil, lfloor, limz, location, log, log10, log1p, log2, loga, logb, logbr, low, lround, ls, lt, lte, lthres, max, min, mix, mod, modabs, mul, neg, nrot, nrotr, or, pow, radtodeg, random, randomn, reverse, reverseGroups, round, rs, rsu, sceil, sdi, separate, sfloor, sign, signMul, sin, sinh, split, sqr, sqrt, sround, sthres, sub, tan, tanh, thir, thres, to0x, toDate, toLocaleString2, toRGB, toStringFix, toStringWrite, toTimeStr, toTimeStr2, triareaEqui, triareaIsos, trip, trunc, xor
+* static: BIT32, BIT64, DIST
 # Boolean
-* ifelse, not, and, or, xor
+* and, ifelse, not, or, pon, xor
 * static: muland, mulor
 # String
-* replaceAt, befj, html, html2, reverse, del, fitEnd, fitStart, loopIncludes, heading, change, toClipboard, func, autoCase, argSplit, isHTML, atob, btoa, parse, forEach, map, shiftChar, bigintFix, trimSplit, trimSplitJoin, reverseGroups, removeSplit, getlast, unstricteq, removeside, fractal, repeatDec
-* static: progress, blank
+* allowIf, argSplit, atob, autoCase, baseSwt, befj, bigintFix, btoa, change, corrupt, cutFirst, cutLast, del, delmul, detectRepeats, detectType, eqlength, error, evalWorks, exclude, findCount, findFirst, findLast, fitEnd, fitStart, forEach, fractal, func, hasFirst, heading, hexToString, html, html2, isHTML, isLetter, isLowerCase, isUpperCase, last, loopIncludes, map, merge, parse, parseInt, put, putevery, removeSplit, removeside, repeatDec, replaceAt, replaceMul, reverse, reverseGroups, setCookie, setLocStr, shift, shiftChar, splitEvery, splitMul, switchCase, toClipboard, toHTML, toHexCode, toSymbol, trimSplit, trimSplitJoin, unstreq, until, untilPrt, untilSplit, untilSplitPrt, untilStrav, whichFirst
+* static: blank, progress
 # BigInt
-* add, sub, inc, dec, mul, div, pow, bas, neg, abs, sign, eq, ex, gt, gte, lt, lte, isz, isPos, isNeg, comp
+* abs, add, bas, comp, dec, div, gt, gte, inc, isNeg, isPos, isz, lt, lte, mul, neg, pow, sign, sub
 # Function
-* iterate, getArgs, getArgsAll, getCommand, addLine, arrayCall, reverseCall, iteration
-* getargs, getargsall and getcommand will not work perfectly, will fix that soon
+* addLine, arrayCall, evalrun, getArgs, getArgsAll, getCmd, iterate, iteration, lagrun, reverseCall, setArgs, setCmd, trycatch, void
 # Array
-* pus, con, befj, fitEnd, fitStart, valueMap, sum, sub, prod, quot, pow, onlyFirst, onlyLast, gate, onlyAllow, stringify, detectRepeats, getIndexes, max, min, split, joinArray, reverseGroups, lastIndexOf, detect, spliceReturn, toRGB, compare, repeat, toObject, joinNum, mapSum, mapProd, mapSub, mapQuot, toSave, toFunctCmd, toFunctArgs, joinFunct, onchange, loga
-* static: fromto, fromwidth
+* allowIf, allowProb, befj, compare, con, defaultAll, detect, detectRepeats, exclude, fitEnd, fitStart, gate, getIndexes, grad, indexOfAll, joinArray, joinFunct, joinNum, joinb, last, lastIndexOf, loga, mapProd, mapQuot, mapSub, mapSum, mapTrim, max, min, numToStr, onchange, onlyAllow, pow, prod, pus, quot, removeRepeats, repeat, reverseGroups, ruleFrac, sortNum, spliceReturn, split, stringify, sub, sum, toFunctArgs, toFunctCmd, toObject, toRGB, toSave, valueMap
+* static: formula, fromto, fromwidth
 # Object
-* define, undefine, get, valueMap, gate, onlyAllow, propNames, stringify, path, sharechd, removechd, toSave, getLength, forEach, map, keyArray, toArray, reverse, sort, allowSyntax, rename, mapName, keys, includes, hasProp, switchType, getType, truefy, modify, isType, toNumber, toBigInt
+* allowIf, allowSyntax, assignTo, ciu, clone, clonepr, default, define, delete, dupli, effect, entries, eq, eqn, ex, exn, forEach, gate, get, getKeys, getLength, getType, hasProp, includes, isArray, isType, map, mapName, merge, newfy, onlyAllow, path, propNames, removechd, rename, reverse, sharechd, sort, stringify, switchType, toArray, toBigInt, toNumber, toSave, truefy, unnew, valueMap
 # Date
-* since, daysSinceYear, add, sub, getAbsDay, toTimeStr
+* add, daysSinceYear, getAbsDay, since, sub, toTimeStr
 # ImageData
-* arrayfy, editpx, getpx, formula
+* arrayfy, editpx, formula, getpx
 # Math
-* static: degrad, distance, chanceTotal
+* static: average, averagelog, chanceTotal, closest, degrad, distance, farthest, findNext, findNext3, isBetw, isIns1, isIns2, isIns3, maxindex, maxuntil, minindex, minuntil
 
 # EasyObj
 * EasyObj is an object with abilities.
-* define, undefine, isDefined, get, createMethod, isConst, protoOf, waitUntil, repeatUntil, key, mouse, isMinimum, addEl, setDef, strict, switchBases, doc, eval, playaudio, set, time, toReadme
+* info, define, undefine, isDefined, get, createMethod, isConst, protoOf, waitUntil, repeatUntil, key, mouse, addEL, setDef, stc, doc, eval, playaudio, set, time, toReadme, aver, clipb, type, errors, prt, random, isNode
