@@ -2527,8 +2527,10 @@ delete config // not really necessary lol
         return this
     }
     
-    AddObj(ImageData, P, S, 'ImageData')
-    P = {}, S = {}
+    if (!EasyObj.isNode) {
+        AddObj(ImageData, P, S, 'ImageData')
+        P = {}, S = {}
+    }
     
     // IMAGEDATA End
 
