@@ -548,7 +548,7 @@ delete config // not really necessary lol
         return this.logb(i).floatFix().ceil().bas(i)
     }
     P.isInf = function () {
-        return this == Infinity
+        return this == Infinity | this == -Infinity
     }
     P.isFin = function () {
         return this != Infinity
@@ -730,6 +730,8 @@ delete config // not really necessary lol
         return o
     }
     P.toStringFix = function (step=0.01, emax=6, emin=-6) {
+        if (this.isNeg()&this.isInf()) return '-Infinity'
+        if (this.isInf()) return 'Infinity'
         if (this.isNaN()) return 'NaN'
         if (this.isz()) return '0'
         var a = this.abs(),
@@ -795,6 +797,8 @@ delete config // not really necessary lol
         return (this.abs() % 10 ** (i + 1) / 10 ** i).floatFix(7).floor() % 10
     }
     P.toStringWrite = function (hasIllions=true, flipSym=false) {
+        if (this.isNeg()&this.isInf()) return '-∞'
+        if (this.isInf()) return '∞'
         var n = this.isNeg(),
             d = this.abs().log10().floor(),
             e = this.abs().dti()
