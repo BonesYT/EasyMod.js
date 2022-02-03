@@ -733,7 +733,7 @@ delete config // not really necessary lol
         if (this.isNaN()) return 'NaN'
         if (this.isz()) return '0'
         var a = this.abs(),
-            b = this.min(1).lfloor(10), c
+            b = this.abs().min(1).lfloor(10), c
         if (a >= 10 ** emax | a <= 10 ** emin) {
             c = a.div(a.lfloor(10)).sfloor(step).floatFix() + 'e' + a.log10().floor()
         } else {
