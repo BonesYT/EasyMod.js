@@ -1,8 +1,8 @@
 /* This is EasyMod.js
    By BonesYT (start: 19:48 03/01/2022 DD/MM/YYYY)
               (release: 11:58 04/01/2022 DD/MM/YYYY)
-              (update: 11:28 02/02/2022 DD/MM/YYYY) <-- edit this as well when modding
-   Last modded by: (no one)
+              (update: 17:04 04/02/2022 DD/MM/YYYY) <-- edit this as well when modding
+   Last modded by: BinaryCrown
    EasyMod.js basically adds functions to strings, numbers, etc.
    Please don't copy! 
    
@@ -27,7 +27,7 @@ var EasyObj = {
         modders: [ // All people that modified/forked this
             "BinaryCrown"
         ],
-        lastBy: "BonesYT", // Last edited by
+        lastBy: "BinaryCrown", // Last edited by
         a: { // All adds
             proto: {}, // Added prototype functions lists
             static: {}, // Added static values lists
@@ -47,26 +47,31 @@ var EasyObj = {
     isDefined: (n)=>{
         return this[n] !== undefined
     },
+    ifnDef: (n,e,p)=>{
+        if (this[n] === undefined) {return null;}
+        e(...p);
+    },
     get: (n)=>{
         return this[n]
     },
+    switchGet: (n,v,e,p)=>{
+        for (let j = 0; j < v.length; j++) {
+            if (this[n] === v[j]) {e(...p[j])}
+        }
+    },
     createMethod: (target, name, func)=>{ //f(Number, 'test', ()=>{//code here})
-        var a = target
-        if (typeof a != 'function') a = this[target]
+        let a = (typeof target !== 'function') ? this[target] : target
         a.prototype[name] = func
     },
-    isConst(varname) { //
-        var zzzz
+    isConst(varname) {
         try {
             eval(varname.toString())
             try {
-                eval(`zzzz = ${varname}`)
-                eval(`${varname} = 'Replaced'`)
-                eval(`${varname} = zzzz`)
-                return false
+                eval(`${varname} = _`)
             } catch {
                 return true
             }
+            return false
         } catch {
             throw ReferenceError('[EasyMod.js] 0: ' + varname + ' is not defined')
         }
@@ -74,7 +79,7 @@ var EasyObj = {
     protoOf: (type)=>{
         this[type].prototype
     },
-    waitUntil(u=()=>{}, f=()=>{}, delay=10) { //wait until u returns true then run f.
+    waitUntil(u=()=>{}, f=()=>{}, delay=10) { // wait until u returns true then run f.
         var a = 0, i,
             b = ()=>{
                 if (u(a)) {
