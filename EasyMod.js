@@ -1,13 +1,12 @@
 /* This is EasyMod.js
    By BonesYT (start: 19:48 03/01/2022 DD/MM/YYYY)
               (release: 11:58 04/01/2022 DD/MM/YYYY)
-              (update: 11:28 02/02/2022 DD/MM/YYYY) <-- edit this as well when modding
+              (update: 14:50 02/02/2022 DD/MM/YYYY) <-- edit this as well when modding
    Last modded by: (no one)
    EasyMod.js basically adds functions to strings, numbers, etc.
    Please don't copy! 
    
-   NOTE: if you're modding/forking this, just remember, also change the .min.js file and in that file,
-   change the EasyObj.info.isMin variable to true!
+   NOTE: if you're modding/forking this, just remember, change everything necessary in EasyObj.info!
    Also, if there's a new function/type, please add it to EasyObj.info.a.changed array!
    
    */
@@ -22,21 +21,23 @@ var config = {
 
 var EasyObj = {
     info: {
-        version: '8',
+        version: '9',
         createdBy: "BonesYT", // Author
         modders: [ // All people that modified/forked this
             "BinaryCrown"
         ],
         lastBy: "BonesYT", // Last edited by
         a: { // All adds
-            proto: {}, // Added prototype functions lists
-            static: {}, // Added static values lists
+            proto: {}, // Added prototype functions lists (starts empty)
+            static: {}, // Added static values lists (starts empty)
             changed: ['Number','Boolean','String','BigInt','Function','Array','Object','Date','ImageData','Math'],
-            totalAdds: undefined // Total proto/static adds
+            totalAdds: undefined, // Total proto/static adds (starts undefined)
+            newfuncts: undefined // All new functions
         },
         from: 'https://github.com/BonesYT/EasyMod.js',
         issues: 'https://github.com/BonesYT/EasyMod.js/issues',
-        isMin: false // Change this to true only in EasyMod.min.js
+        isMin: false, // Change this to true only in EasyMod.min.js
+        lines: 2960 // Ammount of lines this original file has
     },
     define: (n, v)=>{
         this[n] = v
@@ -237,6 +238,32 @@ var EasyObj = {
         setinner(target, innerHTML) {
             if (!(typeof target == 'object' & target.toString().includes('HTML'))) throw TypeError('[EasyMod.js] Target has to be an HTML element')
             target.innerHTML = innerHTML
+        },
+        reload() {
+            document.location.reload()
+        },
+        getCSS() { // gets all loaded CSS files
+            var a = document.querySelectorAll('html>head>link[rel="stylesheet"]'), b = []
+            a.forEach(v => {
+                b.push(v.href)
+            })
+            return b
+        },
+        getJS() { // gets all loaded JS files
+            var a = document.querySelectorAll('html>head>script[src]'), b = []
+            a.forEach(v => {
+                b.push(v.src)
+            })
+            return b
+        },
+        readfile(node) {
+            var a = node.files[0], b, c
+            c=a.text()
+            c.then(v=>b=v)
+            return b
+        },
+        zoom(val) {
+            document.querySelector('html').style.zoom = val
         }
     },
     eval(code, isReturn = true) {
@@ -278,14 +305,37 @@ var EasyObj = {
         },
         easyobj() {
             return `# EasyObj\n* EasyObj is an object with abilities.\n* ${Object.keys(EasyObj).join(', ')}`
+        },
+        absfull() { // Use this if you want to update the README.md file faster/easier while forking.
+            return `# EasyMod.js
+EasyMod.js by BonesYT, a library that adds a variety methods into JS!
+
+This adds a lot of methods to: strings, numbers, booleans, bigint, functions, arrays, objects and date!
+
+Version: VU${EasyObj.info.version}
+VU = Version Update
+
+Helpers/credits (2 users): ${[EasyObj.info.createdBy].concat(EasyObj.info.modders).join(', ')}
+
+${EasyObj.toReadme.full()}`
         }
     },
-    aver(...i) {
-        return i.sum() / i.length
-    },
-    clipb: {
-        info: '',
-        allow: false // Enable this if you want to allow EasyMod.js to read clipboard (will need permission from user)
+    clipb() {
+        try {
+            navigator.clipboard.read().then(async v=>{
+                try {
+                    await v[0].getType('text/plain').then(v=>{
+                        v.text().then(v=>EasyObj.clipb.info=v)
+                    })
+                } catch {
+                    EasyObj.clipb.info = null
+                    return false
+                }
+            })
+            return true
+        } catch {
+            return false
+        }
     },
     type(type, ...values) {
         switch (type) {
@@ -307,7 +357,50 @@ var EasyObj = {
     },
     random: undefined,
     isNode: config.isNode,
-    setint: config.allowsetint
+    setint: config.allowsetint,
+    dc: { // Def: Document Configuration
+        title: undefined,
+        icon: undefined,
+        setTitle(title) {
+            document.querySelector('html>head>title').innerHTML = title
+            EasyObj.dc.title = title.toString()
+        },
+        setIcon(href) {
+            document.querySelector('html>head>link[rel="shortcut icon"]').href = href
+            EasyObj.dc.icon = href.toString()
+        }
+    },
+    fractal(start=0, nextCond=(value,iter)=>{}, nextIter=(value,iter)=>{}, maxIter=Infinity, isArray=false) {
+        var a = start, b = [a]
+        for (var i = 0; !nextCond(a, i) & i < maxIter; i++) {
+            a = nextIter(a, i)
+            if (isArray) b.push(a)
+        }
+        return isArray ? b : a
+    },
+    scrLine() {
+        return Number(Error('test error').stack.substr(81).until(0, ':', 1))
+    },
+    repeat(amm, funct=(iter, array)=>{}, end=(iter, array)=>{}) {
+        var a = []
+        for (var i = 0; i < amm; i++) {
+            a.push(funct(i, a))
+        }
+        end(i, a)
+        return a
+    },
+    switch(input, cases=[], functs=[]) {
+        if (cases.length != functs.length) throw Error('[EasyMod.js] both cases and functs arrays has to have the same length')
+        var a = -1, b
+        cases=cases.map(v => {
+            if (!v.isArray) return [v]
+        })
+        cases.forEach((v,i) => {
+            if (v.includes(input) & a == -1) a = i
+        })
+        if (a != -1) return functs[a](a, input)
+    },
+    saveWarn: false,
 }
 
 delete config // not really necessary lol
@@ -325,7 +418,7 @@ delete config // not really necessary lol
         Object.assign(target, static)
     }
 
-    // Start the prototype and static list
+    // Start the prototype and static list in EasyObj.info.a
     add.changed.forEach(v => {
         add.proto[v] = []
         add.static[v] = []
@@ -818,6 +911,9 @@ delete config // not really necessary lol
     P.to0x = function () {
         return '0x' + this.toString(16)
     }
+    P.reverse = function (a=0, b=1) {
+        return b - (this - a)
+    }
     
     S.DIST = Math.log10(Number.MAX_SAFE_INTEGER)/Math.log10(Number.MAX_VALUE)
     S.BIT32 = 2 ** 31 - 1
@@ -1172,7 +1268,7 @@ delete config // not really necessary lol
     }
     P.untilStrav = function (until='"', avoider='\\') { // Def: strav = string end avoider
         var w = until
-        if (!until.isArray()) until = [until]
+        if (!until.isArray) until = [until]
         until = this.findFirst(until, 1)
         var end = this.whichFirst.apply(this, [0].concat(w))
         var a = until, b = ''
@@ -1377,6 +1473,9 @@ delete config // not really necessary lol
         }
         return isType ? a.type : a
     }
+    P.isSymbol = function () {
+        return!! (this.substr(0, 7) == 'Symbol(' & this[this.length - 1] == ')')
+    }
     P.evalWorks = function () {
         try {
             Function(this)
@@ -1386,7 +1485,7 @@ delete config // not really necessary lol
         }
     }
     P.error = function (type=0, isThrow=true) {
-        if (typeof type == 'string') type = EasyObj.errors.indexOf(type)
+        if (typeof type == 'string' & EasyObj.errors.includes(type)) type = EasyObj.errors.indexOf(type)
         var a
         switch (type) {
             case 0: a = Error(this); break
@@ -1396,6 +1495,9 @@ delete config // not really necessary lol
             case 4: a = TypeError(this); break
             case 5: a = URIError(this); break
             case 6: a = EvalError(this); break
+        }
+        if (typeof type == 'string' & !EasyObj.errors.includes(type)) {
+            a = type += new Error(this).stack
         }
         if (isThrow) {
             throw a
@@ -1471,6 +1573,63 @@ delete config // not really necessary lol
             return v.parseInt().fromCharCode()
         }).join('')
     }
+    P.reverseGroups2 = function (groupSize) {
+        return this.reverseGroups().reverse()
+    }
+    P.stringify = function (cover='"', avoider='\\') {
+        return cover + this.replaceAll(cover, avoider + cover) + cover
+    }
+    P.unstringify = function (cover='"', avoider='\\') {
+        if (this[0] == cover & this.last() == cover) {
+            return this.removeside().removeside(0).replaceAll(avoider + cover, cover)
+        } else return this
+    }
+    P.comp64 = function () {
+        var a = btoa(this), b, c, o = ''
+        for (var i of a) {
+            b = i.charCodeAt()
+            if (b >= 65 & b <= 90) c = b - 65;
+            else if (b >= 97 & b <= 122) c = b - 71;
+            else if (b >= 48 & b <= 57) c = b + 4;
+            else if (b == 43) c = 62
+            else if (b == 47) c = 63
+            else if (b == 61) c = 64
+            o += c.fromCharCode()
+        }
+        return o
+    }
+    P.deco64 = function () {
+        var a = this, b, c, o = ''
+        for (var i of a) {
+            b = i.charCodeAt()
+            if (b < 26) c = b + 65;
+            else if (b >= 26 & b < 52) c = b + 71;
+            else if (b >= 52 & b < 62) c = b - 4;
+            else if (b == 62) c = 43
+            else if (b == 63) c = 47
+            else if (b == 64) c = 61
+            o += c.fromCharCode()
+        }
+        return atob(o)
+    }
+    P.log = function (css='') {
+        if (css) {
+            console.log('%c' + this, css)
+        } else {
+            console.log(this.unnew())
+        }
+    }
+    P.trimLines = function () {
+        return this.split('\n').map(v => {return v.trim()}).join('\n')
+    }
+    P.syntaxComp = function (isError=false) { // Def: syntax compatibility
+        try {
+            new Function(this.unnew())
+            return isError ? undefined : true
+        } catch (e) {
+            return isError ? e : false
+        }
+    }
 
     S.progress = (length, progress, full='|', empty='.')=>{
         var a = (length * progress).floor().max(0).min(length),
@@ -1520,9 +1679,9 @@ delete config // not really necessary lol
         return BigInt(i) - this
     }
     P.abs = function (i) {
-        var a = Number(this)
-        a = a.abs()
-        return BigInt(a)
+        var a = this + 0n
+        if (a.isNeg()) a *= -1n
+        return a
     }
     P.sign = function (i) {
         var a = Number(this)
@@ -1553,6 +1712,33 @@ delete config // not really necessary lol
     P.comp = function (i) {
         return (this-BigInt(i)).sign()
     }
+    P.log10 = function () {
+        return this.toNumber().log10()
+    }
+    P.log10a = function (floord = true) { // Def: logarithm 10 absolute
+        if (this == 0n) return -Infinity
+        var a = floord ? 0 : Number(this.toString().put(1, '.')).log10()
+        return this.abs().toString().length - 1 + a
+    }
+    P.sfloor = function (step=10) {
+        return this.toNumber().sfloor(step).toBigInt()
+    }
+    P.sround = function (step=10) {
+        return this.toNumber().sround(step).toBigInt()
+    }
+    P.sceil = function (step=10) {
+        return this.toNumber().sceil(step).toBigInt()
+    }
+    P.toStringFix = function (stepe=2, emax=6) {
+        var a = this.abs().toString(),
+            b = a.substr(0, stepe + 1).put(1, '.')
+        if (this.log10a() >= emax) {
+            var c = b + 'e' + this.log10a()
+            return this.isNeg() ? '-' + c : c
+        } else {
+            return this.isNeg() ? '-' + a : a
+        }
+    } 
     
     AddObj(BigInt, P, S, 'BigInt')
     P = {}, S = {}
@@ -1607,8 +1793,8 @@ delete config // not really necessary lol
         a = a.join('\n')
         return a.func()
     }
-    P.arrayCall = function (This=this, args) {
-        return this.apply(This, args)
+    P.arrayCall = function (args) {
+        return this.apply(this, args)
     }
     P.reverseCall = function (...args) {
         args.reverse()
@@ -1638,9 +1824,9 @@ delete config // not really necessary lol
         a.push(cmdstr)
         return Function.apply(null, a)
     }
-    P.evalrun = function (This=this, ...args) {
+    P.evalrun = function (...args) {
         args = args.map(v => {return eval(v)})
-        this.apply(This, args)
+        return this.apply(this, args)
     }
     P.void = function () {
         return void this()
@@ -2068,6 +2254,32 @@ delete config // not really necessary lol
         var a = i % 1, b = i.floor()
         return this[b] * (1 - a) + this[b + 1] * a
     }
+    P.reverseGroups2 = function (groupSize) {
+        return this.reverseGroups().reverse()
+    }
+    P.chng = function (f=(current,next,index,array)=>{ // Def: change
+        return Math.abs(current - next)
+    }) {
+        var a = []
+        for (var i = 0; i < this.length - 1; i++) {
+            a.push(f(this[i], this[i + 1], i, this))
+        }
+        return a
+    }
+    P.next = function (i=0, ignorezero=true) {
+        var a
+        return this.map(v => {
+            a = v - i
+            return (ignorezero ? a <= 0 : a < 0) ? Infinity : a
+        }).min() + i
+    }
+    P.prev = function (i=0, ignorezero=true) {
+        var a
+        return this.map(v => {
+            a = -(v - i)
+            return (ignorezero ? a <= 0 : a < 0) ? Infinity : a
+        }).min().neg() + i
+    }
     
     S.fromto = (start = 1, end = 10, by = 1)=>{
         var out = []
@@ -2104,6 +2316,7 @@ delete config // not really necessary lol
         }
         return out
     }
+    P.isArray = true
     
     AddObj(Array, P, S, 'Array')
     P = {}, S = {}
@@ -2371,6 +2584,7 @@ delete config // not really necessary lol
         return Number(this)
     }
     P.toBigInt = function () {
+        if (typeof this == 'number') return BigInt(this.floor())
         return BigInt(this)
     }
     P.default = function () {
@@ -2420,8 +2634,32 @@ delete config // not really necessary lol
     P.exn = function (i) {
         return this.unnew() !== i.unnew()
     }
-    P.isArray = function () {
-        return Array.isArray(this)
+    P.isArray = false
+    P.methodIter = function (methodname, iter=1, ...args) {
+        var a = this.unnew()
+        for (var i = 0; i < iter; i++) {
+            a = a[methodname].apply(a, args)
+        }
+        return a
+    }
+    P.deletable = function (propName) {
+        var a = this[propName], b
+        b = delete this[propName]
+        if (b) this[propName] = a
+        return b
+    }
+    P.isThis = false
+    P.objectType = function () {
+        switch (this.type) {
+            case 'number': return 'Number'
+            case 'string': return 'String'
+            case 'boolean': return 'Boolean'
+            case 'bigint': return 'BigInt'
+            case 'symbol': return 'Symbol'
+        }
+        if (this.isArray) return 'Array'
+        if (!this.toString().hasFirst('[object ')) throw Error('[EasyMod.js] Object does not have the original toString function')
+        return this.toString().substr(8).cutLast(1)
     }
     
     AddObj(Object, P, S, 'Object')
@@ -2606,6 +2844,10 @@ delete config // not really necessary lol
     S.findNext3 = (x, y, z) => {
         return z * 3 - y * 3 + x
     }
+    S.TAU = Math.PI * 2
+    S.aver = (...i) => {
+        return i.sum() / i.length
+    },
     
     AddObj(Math, P, S, 'Math')
 
@@ -2665,34 +2907,40 @@ delete config // not really necessary lol
         })
     }
 
-    // Clipboard info reading (was hard to program this lol
-    if (!EasyObj.isNode & EasyObj.setint) setInterval(async ()=>{
-        try {
-            if (EasyObj.clipb.allow) {
-                await navigator.clipboard.read().then(async v=>{
-                    try {
-                        await v[0].getType('text/plain').then(v=>{
-                            v.text().then(v=>EasyObj.clipb.info=v)
-                        })
-                    } catch {
-                        EasyObj.clipb.info = null
-                    }
-                })
-            }
-        } catch {}
-    }, 25)
-    if (EasyObj.setint) setInterval(()=>{ // Random value between 0 and 1. Set once every script.
-        EasyObj.random = Math.random()
-    }, 10)
+    if (EasyObj.setint) {
+        setInterval(()=>{ // Random value between 0 and 1. Set once every script.
+            EasyObj.random = Math.random()
+        }, 10)
+    }
+    if (EasyObj.setint & !EasyObj.isNode) {
+        setTimeout(()=>{
+            EasyObj.dc.title = (document.querySelector('html>head>title') || {}).innerHTML
+            EasyObj.dc.icon = (document.querySelector('html>head>link[rel="shortcut icon"]') || {}).href
+        },10)
+    }
+
+    if (!EasyObj.isNode) window.addEventListener('beforeunload', function (e) {
+        if (EasyObj.saveWarn) {
+            e.preventDefault();
+            e.returnValue = ''
+        }
+    })
 
     var addm = 0
+    var addm2 = 0, q
     add.proto.forEach((v)=>{
         addm += v.length
+        addm2 += v.length
     })
-    add.static.forEach((v)=>{
+    add.static.forEach((v,u)=>{
         addm += v.length
+        addm2 += v.allowIf(w => {
+            return typeof this[u][w] == 'function'
+        }).length
     })
     add.totalAdds = addm
+    EasyObj.info.a.newfuncts = addm2
+    
 
     var time = Date.now()
     if (EasyObj.setint) setInterval(()=>{
@@ -2707,4 +2955,6 @@ delete config // not really necessary lol
     Object.prototype.type = 'object'
     Symbol.prototype.type = 'symbol'
 
-})() // 70.4% from 2k to 3k!    (if modding update this lol)
+    isThis = true
+
+})() // 96.0% from 2k to 3k!    (if modding update this lol)

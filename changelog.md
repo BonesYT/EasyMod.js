@@ -19,3 +19,4 @@ date: DD/MM/YYYY
 * Much more! Added 761 more lines!
 * Function command/argument reading has improved! But doesn't support `${}` well yet.
 * Added so much to strings, with text reading and stuff
+# VU9 - 02/02/2022 (11:28) | BonesYT

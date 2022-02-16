@@ -1,6 +1,6 @@
 {
     "name": "easymod.js",
-    "version": "8",
+    "version": "10",
     "description": "EasyMod.js by BonesYT, a library that adds a variety of methods into JS!",
     "main": "EasyMod.js",
     "scripts": {
