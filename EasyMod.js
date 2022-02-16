@@ -1,7 +1,7 @@
 /* This is EasyMod.js
    By BonesYT (start: 19:48 03/01/2022 DD/MM/YYYY)
               (release: 11:58 04/01/2022 DD/MM/YYYY)
-              (update: 14:50 02/02/2022 DD/MM/YYYY) <-- edit this as well when modding
+              (update: 14:50 16/02/2022 DD/MM/YYYY) <-- edit this as well when modding
    Last modded by: (no one)
    EasyMod.js basically adds functions to strings, numbers, etc.
    Please don't copy! 
@@ -307,34 +307,28 @@ var EasyObj = {
             return `# EasyObj\n* EasyObj is an object with abilities.\n* ${Object.keys(EasyObj).join(', ')}`
         },
         absfull() { // Use this if you want to update the README.md file faster/easier while forking.
-            return `# EasyMod.js
-EasyMod.js by BonesYT, a library that adds a variety methods into JS!
-
-This adds a lot of methods to: strings, numbers, booleans, bigint, functions, arrays, objects and date!
-
-Version: VU${EasyObj.info.version}
-VU = Version Update
-
-Helpers/credits (2 users): ${[EasyObj.info.createdBy].concat(EasyObj.info.modders).join(', ')}
-
-${EasyObj.toReadme.full()}`
+            return `# EasyMod.js\nEasyMod.js by BonesYT, a library that adds a variety methods into JS!\n\nThis adds a lot of methods to: strings, numbers, booleans, bigint, functions, arrays, objects and date!\n\nVersion: VU${EasyObj.info.version}\nVU = Version Update\n\nHelpers/credits (2 users): ${[EasyObj.info.createdBy].concat(EasyObj.info.modders).join(', ')}\n\n${EasyObj.toReadme.full()}`
         }
     },
-    clipb() {
-        try {
-            navigator.clipboard.read().then(async v=>{
-                try {
-                    await v[0].getType('text/plain').then(v=>{
-                        v.text().then(v=>EasyObj.clipb.info=v)
-                    })
-                } catch {
-                    EasyObj.clipb.info = null
-                    return false
-                }
-            })
-            return true
-        } catch {
-            return false
+    clipb: {
+        info: '',
+        get() { // Note that you need to use setTimeout because it doesn't update EasyObj.clipb.info immediately
+            try {
+                var o
+                navigator.clipboard.read().then(async v=>{
+                    try {
+                        await v[0].getType('text/plain').then(v=>{
+                            v.text().then(v=>EasyObj.clipb.info=v)
+                        })
+                    } catch {
+                        EasyObj.clipb.info = null
+                        return false
+                    }
+                })
+                return true
+            } catch {
+                return false
+            }
         }
     },
     type(type, ...values) {
